@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Commencement 2026 • Interactive VIP Invitation & Yearbook</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#E2B857',
+              accent: '#6366F1',
+              dark: '#08080A',
+              card: '#121217',
+              border: 'rgba(255, 255, 255, 0.08)'
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            display: ['Space Grotesk', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons & Canvas Confetti -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      background-color: #08080A;
+      color: #F3F4F6;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    .font-handwriting {
+      font-family: 'Caveat', cursive;
+    }
+
+    /* Ambient background mesh */
+    .bg-mesh {
+      background-image: 
+        radial-gradient(at 15% 15%, rgba(99, 102, 241, 0.15) 0px, transparent 45%),
+        radial-gradient(at 85% 15%, rgba(226, 184, 87, 0.12) 0px, transparent 45%),
+        radial-gradient(at 50% 65%, rgba(139, 92, 246, 0.12) 0px, transparent 55%),
+        radial-gradient(at 20% 90%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+    }
+
+    /* Grid Overlay Pattern */
+    .bg-grid-pattern {
+      background-size: 36px 36px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+
+    /* Corkboard/Memory wall dots pattern */
+    .bg-dots {
+      background-size: 24px 24px;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px);
+    }
+
+    /* 3D Holographic Card Container */
+    .ticket-wrapper {
+      perspective: 1200px;
+    }
+
+    .ticket-card {
+      transition: transform 0.15s ease-out, box-shadow 0.2s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .hologram-glare {
+      position: absolute;
+      inset: 0;
+      border-radius: 1.5rem;
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.25) 40%,
+        rgba(99, 102, 241, 0.3) 50%,
+        rgba(226, 184, 87, 0.3) 60%,
+        transparent 80%
+      );
+      mix-blend-mode: color-dodge;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spin-slow 16s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: 200%;
+      animation: marquee 22s linear infinite;
+    }
+
+    .glass-card {
+      background: rgba(18, 18, 23, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    /* Sticker Pop Animation */
+    @keyframes sticker-pop {
+      0% { transform: scale(0.2) rotate(calc(var(--rot) - 15deg)); opacity: 0; }
+      70% { transform: scale(1.2) rotate(calc(var(--rot) + 5deg)); opacity: 1; }
+      100% { transform: scale(1) rotate(var(--rot)); opacity: 1; }
+    }
+    .sticker-placed {
+      animation: sticker-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      cursor: grab;
+      touch-action: none;
+    }
+    .sticker-placed:active {
+      cursor: grabbing;
+      transform: scale(1.15) rotate(var(--rot)) !important;
+    }
+
+    /* Sticky Note styles */
+    .sticky-note {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      cursor: grab;
+    }
+    .sticky-note:hover {
+      transform: scale(1.05) translateY(-4px) !important;
+      z-index: 40 !important;
+      box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7);
+    }
+    .sticky-note:active {
+      cursor: grabbing;
+    }
+  </style>
+</head>
+<body class="bg-mesh bg-grid-pattern min-h-screen relative flex flex-col justify-between">
+
+  <!-- Floating Navigation & Sound Bar -->
+  <header class="w-full max-w-6xl mx-auto px-6 py-6 flex items-center justify-between z-30 sticky top-0 backdrop-blur-md bg-black/20 border-b border-white/5">
+    <div class="flex items-center gap-3">
+      <span class="inline-block text-brand-gold text-2xl animate-spin-slow font-mono font-bold">*</span>
+      <div class="leading-tight">
+        <div class="text-[10px] uppercase tracking-widest text-zinc-400 font-mono">The Graduation Hub</div>
+        <div class="text-sm font-semibold tracking-wide text-white">THE COMMENCEMENT 2026</div>
+      </div>
+    </div>
+
+    <!-- Switch View Tabs -->
+    <div class="flex items-center gap-1.5 p-1 bg-white/5 border border-white/10 rounded-full">
+      <button onclick="switchTab('ticket')" id="tabTicketBtn" class="px-4 py-1.5 rounded-full text-xs font-medium transition bg-white/15 text-white shadow-sm flex items-center gap-1.5">
+        <i data-lucide="ticket" class="w-3.5 h-3.5 text-brand-gold"></i>
+        <span>VIP Invitation</span>
+      </button>
+      <button onclick="switchTab('yearbook')" id="tabYearbookBtn" class="px-4 py-1.5 rounded-full text-xs font-medium transition text-zinc-400 hover:text-white flex items-center gap-1.5">
+        <i data-lucide="book-heart" class="w-3.5 h-3.5 text-pink-400"></i>
+        <span>Yearbook & Stickers</span>
+      </button>
+    </div>
+
+    <!-- SFX Button -->
+    <div class="flex items-center gap-3">
+      <button id="soundToggle" onclick="toggleAudioFx()" class="glass-card px-3.5 py-1.5 rounded-full text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-2 transition hover:scale-105 active:scale-95">
+        <i data-lucide="volume-2" class="w-3.5 h-3.5 text-brand-gold"></i>
+        <span id="soundLabel">SFX: ON</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Kinetic Typography Marquee Header -->
+  <div class="w-full overflow-hidden border-b border-white/5 py-2 bg-black/50 backdrop-blur-sm z-10">
+    <div class="animate-marquee font-mono text-xs tracking-widest uppercase text-zinc-400 whitespace-nowrap">
+      <span class="mx-6">★ EXCLUSIVE GRADUATION CEREMONY & GALA</span>
+      <span class="mx-6 text-brand-gold">✦ MEMORY WALL & INTERACTIVE GUESTBOOK</span>
+      <span class="mx-6">★ SLAP STICKERS FREELY ON CANVAS</span>
+      <span class="mx-6 text-pink-400">✦ LEAVE YOUR WISHES & MEMORIES</span>
+      <span class="mx-6">★ SATURDAY, OCTOBER 24, 2026</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 1: VIP INVITATION & BENTO (Hero Pass) -->
+  <!-- ============================================================ -->
+  <div id="viewTicket" class="w-full max-w-6xl mx-auto px-6 py-10 flex-1 flex flex-col items-center justify-center relative z-10">
+    
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-zinc-300 mb-3">
+        <span>UI/UX DESIGN & DIGITAL MEDIA</span>
+        <span class="text-brand-gold">✳</span>
+        <span>HONORS PASS</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-2 font-display">
+        The Next Chapter<span class="text-brand-gold">.</span>
+      </h1>
+      <p class="text-zinc-400 text-sm md:text-base max-w-lg mx-auto">
+        Trải nghiệm thiệp mời tương tác 3D. Nhập tên của bạn hoặc chuyển sang tab <span class="text-pink-400 font-semibold cursor-pointer underline underline-offset-4" onclick="switchTab('yearbook')">Yearbook & Stickers</span> để dán sticker lưu bút.
+      </p>
+    </div>
+
+    <!-- 3D Card Interactive Element -->
+    <div class="ticket-wrapper my-4 cursor-pointer" id="ticketWrapper">
+      <div id="ticketCard" class="ticket-card relative w-[340px] md:w-[480px] h-[220px] md:h-[280px] rounded-3xl p-7 md:p-8 flex flex-col justify-between overflow-hidden shadow-2xl bg-gradient-to-br from-[#161620] via-[#101016] to-[#0A0A0F] border border-white/15">
+        
+        <div id="hologramGlare" class="hologram-glare"></div>
+
+        <div class="absolute -right-12 -bottom-14 text-white/[0.03] select-none pointer-events-none text-[260px] font-mono leading-none">
+          ✳
+        </div>
+
+        <div class="flex items-start justify-between relative z-10">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono px-2.5 py-0.5 rounded bg-brand-gold/15 text-brand-gold border border-brand-gold/30 font-semibold">VIP PASS</span>
+              <span class="text-[11px] font-mono text-zinc-400">#GRAD-2026</span>
+            </div>
+            <div class="text-xl md:text-2xl font-bold tracking-tight text-white mt-2">COMMENCEMENT 2026</div>
+            <div class="text-xs text-zinc-400 font-mono">B.A. IN INTERACTION DESIGN</div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md">
+            <span class="text-2xl text-brand-gold animate-spin-slow">✦</span>
+          </div>
+        </div>
+
+        <div class="relative z-10 my-auto">
+          <div class="text-[11px] uppercase tracking-wider text-zinc-400 font-mono">Honored Guest / Khách Mời VIP</div>
+          <div id="ticketNameDisplay" class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-brand-gold">
+            Alex Tran
+          </div>
+        </div>
+
+        <div class="flex items-end justify-between border-t border-white/10 pt-4 relative z-10 text-xs font-mono text-zinc-400">
+          <div>
+            <div class="text-white font-semibold">SAT, 24 OCT 2026</div>
+            <div>09:00 AM — AUDITORIUM A</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="text-right">
+              <div class="text-[10px] text-zinc-400 uppercase">ACCESS CODE</div>
+              <div class="text-emerald-400 font-mono font-bold tracking-wider">SEC-A • ROW 01</div>
+            </div>
+            <div class="w-10 h-7 bg-white/10 rounded flex items-center justify-center p-1">
+              <i data-lucide="qr-code" class="w-5 h-5 text-white/80"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bento Grid Event Details -->
+    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+      <!-- Bento 1: Realtime Countdown -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-zinc-400 mb-2">
+          <span class="text-xs font-mono uppercase tracking-wider">Countdown</span>
+          <i data-lucide="clock" class="w-4 h-4 text-brand-gold"></i>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center my-2 font-mono">
+          <div class="bg-black/40 rounded-xl p-2.5 border border-white/5">
+            <div id="cntDays" class="text-2xl font-bold text-white">42</div>
+            <div class="text-[10px] text-zinc-400">DAYS</div>
+          </div>
+          <div class="bg-black/40 rounded-xl p-2.5 border border-white/5">
+            <div id="cntHours" class="text-2xl font-bold text-white">14</div>
+            <div class="text-[10px] text-zinc-400">HOURS</div>
+          </div>
+          <div class="bg-black/40 rounded-xl p-2.5 border border-white/5">
+            <div id="cntMins" class="text-2xl font-bold text-brand-gold">59</div>
+            <div class="text-[10px] text-zinc-400">MINS</div>
+          </div>
+        </div>
+        <div class="text-[11px] text-zinc-400 text-center font-mono">
+          Thời gian đếm ngược tới buổi lễ
+        </div>
+      </div>
+
+      <!-- Bento 2: Interactive Dress Code Swatches -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" id="dresscodeCard">
+        <div class="flex items-center justify-between text-zinc-400 mb-2">
+          <span class="text-xs font-mono uppercase tracking-wider">Dress Code</span>
+          <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-white mb-1">Elegance & Modern Chic</div>
+          <div class="text-xs text-zinc-400 mb-3">Chạm vào bảng màu để xem gợi ý:</div>
+          <div class="flex items-center gap-3">
+            <button onclick="setThemeAccent('#0D0D12', 'Midnight Black', this)" class="swatch-btn w-9 h-9 rounded-full bg-[#121217] border-2 border-white ring-2 ring-indigo-500/50 transition transform hover:scale-110 active:scale-95 shadow-lg" title="Midnight Black"></button>
+            <button onclick="setThemeAccent('#E2B857', 'Champagne Gold', this)" class="swatch-btn w-9 h-9 rounded-full bg-[#E2B857] border-2 border-transparent transition transform hover:scale-110 active:scale-95 shadow-lg" title="Champagne Gold"></button>
+            <button onclick="setThemeAccent('#6366F1', 'Electric Indigo', this)" class="swatch-btn w-9 h-9 rounded-full bg-[#6366F1] border-2 border-transparent transition transform hover:scale-110 active:scale-95 shadow-lg" title="Electric Indigo"></button>
+            <button onclick="setThemeAccent('#F5F5F7', 'Ivory Pearl', this)" class="swatch-btn w-9 h-9 rounded-full bg-[#F5F5F7] border-2 border-transparent transition transform hover:scale-110 active:scale-95 shadow-lg" title="Ivory Pearl"></button>
+          </div>
+        </div>
+        <div id="dresscodeLabel" class="text-xs font-mono text-brand-gold mt-3">Selected: Midnight Black</div>
+      </div>
+
+      <!-- Bento 3: Coordinates & Location -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-zinc-400 mb-2">
+          <span class="text-xs font-mono uppercase tracking-wider">Location Pin</span>
+          <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-white mb-1">Metropolis Grand Hall</div>
+          <div class="text-xs text-zinc-400">Tầng 5, Trung tâm Hội nghị Quốc tế, TP. Hồ Chí Minh</div>
+          <div class="text-[11px] font-mono text-zinc-400 mt-2">10.7769° N, 106.7009° E</div>
+        </div>
+        <a href="https://maps.google.com" target="_blank" onclick="playBeep(600)" class="mt-3 inline-flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-white transition">
+          <span>Open Google Maps</span>
+          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- RSVP CTA Card -->
+    <div class="w-full max-w-xl glass-card rounded-3xl p-8 mt-6 border border-white/15 relative overflow-hidden">
+      <div class="text-center mb-6">
+        <div class="text-xs font-mono text-brand-gold uppercase tracking-wider mb-1">RSVP Confirmation</div>
+        <h3 class="text-2xl font-bold text-white">Xác nhận tham dự</h3>
+        <p class="text-zinc-400 text-xs mt-1">Cập nhật tên của bạn để in lên thẻ VIP & nhận kỷ niệm chương.</p>
+      </div>
+
+      <form id="rsvpForm" onsubmit="handleRSVP(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-mono text-zinc-300 mb-1.5">TÊN CỦA BẠN (IN TRÊN THẺ VIP)</label>
+          <input 
+            type="text" 
+            id="guestNameInput" 
+            value="Alex Tran" 
+            placeholder="Nhập họ và tên..." 
+            oninput="updateTicketName(this.value)" 
+            class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/15 text-white placeholder-zinc-500 focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition font-medium"
+            required
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-gold via-amber-400 to-yellow-500 text-black font-bold tracking-wide flex items-center justify-center gap-2 hover:opacity-95 transition transform active:scale-98 shadow-xl shadow-amber-500/20"
+        >
+          <i data-lucide="sparkles" class="w-4 h-4 text-black"></i>
+          <span>XÁC NHẬN VÉ & BẮN PHÁO HOA</span>
+        </button>
+      </form>
+
+      <div id="rsvpSuccessAlert" class="hidden mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-3">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+        <div>
+          <span class="font-bold">Đã kích hoạt vé VIP thành công!</span> Hẹn gặp bạn tại buổi lễ. Hãy ghé qua tab <button onclick="switchTab('yearbook')" class="underline font-bold text-white">Yearbook & Stickers</button> để dán sticker nhé!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 2: INTERACTIVE YEARBOOK & STICKER BOARD -->
+  <!-- ============================================================ -->
+  <div id="viewYearbook" class="hidden w-full max-w-6xl mx-auto px-6 py-8 flex-1 flex flex-col relative z-10">
+
+    <!-- Header info & Sticker Toolbar -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-white/10">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-xs font-mono text-pink-300 mb-2">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>FIGMA FIGJAM & YEARBOOK CANVAS</span>
+        </div>
+        <h2 class="text-3xl font-extrabold text-white font-display">Bức Tường Lưu Bút & Dán Sticker 🎓</h2>
+        <p class="text-zinc-400 text-xs md:text-sm mt-1">
+          Chọn sticker bên phải rồi <span class="text-brand-gold font-bold">nhấp chuột vào bất cứ đâu</span> trên bảng để dán, hoặc để lại một tờ giấy note chúc mừng!
+        </p>
+      </div>
+
+      <!-- Sticker Palette Dock -->
+      <div class="glass-card p-2 rounded-2xl flex items-center gap-1.5 self-start md:self-auto border border-white/15 shadow-xl">
+        <div class="text-[10px] font-mono text-zinc-400 px-2 uppercase tracking-wider hidden sm:block">Sticker Dock:</div>
+        <button onclick="selectSticker('🎓', this)" class="sticker-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 flex items-center justify-center text-xl transition transform hover:scale-125 active:scale-95 border-2 border-brand-gold ring-2 ring-brand-gold/30" title="Grad Cap">🎓</button>
+        <button onclick="selectSticker('🍾', this)" class="sticker-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 flex items-center justify-center text-xl transition transform hover:scale-125 active:scale-95 border-2 border-transparent" title="Champagne">🍾</button>
+        <button onclick="selectSticker('⭐', this)" class="sticker-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 flex items-center justify-center text-xl transition transform hover:scale-125 active:scale-95 border-2 border-transparent" title="Star">⭐</button>
+        <button onclick="selectSticker('🚀', this)" class="sticker-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 flex items-center justify-center text-xl transition transform hover:scale-125 active:scale-95 border-2 border-transparent" title="Rocket">🚀</button>
+        <button onclick="selectSticker('💖', this)" class="sticker-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 flex items-center justify-center text-xl transition transform hover:scale-125 active:scale-95 border-2 border-transparent" title="Love">💖</button>
+        <button onclick="selectSticker('🕶️', this)" class="sticker-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 flex items-center justify-center text-xl transition transform hover:scale-125 active:scale-95 border-2 border-transparent" title="Cool">🕶️</button>
+        <button onclick="selectSticker('💯', this)" class="sticker-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 flex items-center justify-center text-xl transition transform hover:scale-125 active:scale-95 border-2 border-transparent" title="100">💯</button>
+        <button onclick="selectSticker('✨', this)" class="sticker-btn w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 flex items-center justify-center text-xl transition transform hover:scale-125 active:scale-95 border-2 border-transparent" title="Sparkle">✨</button>
+      </div>
+    </div>
+
+    <!-- Memory Board Workspace Area -->
+    <div 
+      id="stickerBoard" 
+      onclick="handleBoardClick(event)" 
+      class="w-full min-h-[580px] bg-[#0c0c12] bg-dots rounded-3xl border border-white/15 relative overflow-hidden shadow-inner p-6 cursor-crosshair select-none"
+    >
+      <!-- Watermark text in board background -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none select-none opacity-20">
+        <div class="text-7xl font-mono text-zinc-500 font-bold mb-2">* * *</div>
+        <div class="text-zinc-500 font-mono text-sm tracking-widest uppercase">Tap anywhere to slap sticker • Drag notes freely</div>
+      </div>
+
+      <!-- Quick Add Note Floating Bar -->
+      <div class="absolute top-4 left-4 z-20" onclick="event.stopPropagation()">
+        <button onclick="openNoteModal()" class="glass-card px-4 py-2.5 rounded-2xl text-xs font-bold text-white flex items-center gap-2 border border-brand-gold/40 hover:bg-brand-gold/15 transition transform hover:scale-105 active:scale-95 shadow-lg">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-brand-gold"></i>
+          <span>Dán Giấy Note Chúc Mừng ✍️</span>
+        </button>
+      </div>
+
+      <!-- Pre-rendered Interactive Sticky Notes (Draggable & Likeable) -->
+      <div id="notesContainer">
+        <!-- Note 1: Gold Sticky -->
+        <div 
+          class="sticky-note absolute left-8 top-20 w-64 p-5 rounded-2xl shadow-2xl bg-gradient-to-br from-[#FEF08A] to-[#FDE047] text-zinc-900 border border-amber-300" 
+          style="transform: rotate(-3deg); z-index: 10;"
+          onclick="event.stopPropagation()"
+        >
+          <div class="flex items-center justify-between border-b border-black/10 pb-2 mb-3">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-900">★ MINH QUAN (STUDIO LEAD)</span>
+            <span class="text-base">📌</span>
+          </div>
+          <p class="font-handwriting text-2xl leading-snug font-bold text-zinc-900 mb-4">
+            Chúc mừng bạn tốt nghiệp xuất sắc! Portfolio quá cháy, chuẩn bị càn quét làng UI/UX thế giới nhé! 🚀
+          </p>
+          <div class="flex items-center justify-between text-xs font-mono text-zinc-700">
+            <span>2 phút trước</span>
+            <button onclick="likeNote(this, event)" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/10 hover:bg-black/20 font-bold text-red-600 transition">
+              <span>❤️</span> <span class="like-cnt">12</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Note 2: Rose Sticky -->
+        <div 
+          class="sticky-note absolute right-12 top-16 w-64 p-5 rounded-2xl shadow-2xl bg-gradient-to-br from-[#FBCFE8] to-[#F472B6] text-zinc-900 border border-pink-300" 
+          style="transform: rotate(4deg); z-index: 12;"
+          onclick="event.stopPropagation()"
+        >
+          <div class="flex items-center justify-between border-b border-black/10 pb-2 mb-3">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-pink-950">★ LINH & HUY</span>
+            <span class="text-base">📌</span>
+          </div>
+          <p class="font-handwriting text-2xl leading-snug font-bold text-zinc-900 mb-4">
+            Tự hào về bạn vô cùng! Hôm lễ tụi mình sẽ mang hoa to nhất hội trường tới tặng nheee 💐🎓
+          </p>
+          <div class="flex items-center justify-between text-xs font-mono text-zinc-800">
+            <span>10 phút trước</span>
+            <button onclick="likeNote(this, event)" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/10 hover:bg-black/20 font-bold text-red-600 transition">
+              <span>❤️</span> <span class="like-cnt">28</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Note 3: Dark Glass Modern Note -->
+        <div 
+          class="sticky-note absolute left-1/3 bottom-12 w-72 p-5 rounded-2xl shadow-2xl bg-[#181822]/90 backdrop-blur-md text-white border border-indigo-500/30" 
+          style="transform: rotate(-1.5deg); z-index: 11;"
+          onclick="event.stopPropagation()"
+        >
+          <div class="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
+            <span class="text-xs font-mono font-bold text-indigo-400 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-indigo-400"></span> DEV TEAMMATES
+            </span>
+            <span class="text-base">💎</span>
+          </div>
+          <p class="font-mono text-xs leading-relaxed text-zinc-200 mb-4">
+            <code>git commit -m "Graduated with Honors 🎉"</code><br/>
+            Cảm ơn vì những đêm thức trắng sửa bug đồ án tốt nghiệp cùng nhau. See you at the Gala!
+          </p>
+          <div class="flex items-center justify-between text-xs font-mono text-zinc-400">
+            <span>Hôm nay 08:30</span>
+            <button onclick="likeNote(this, event)" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold transition">
+              <span>❤️</span> <span class="like-cnt">45</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placed Stickers container -->
+      <div id="stickersContainer"></div>
+
+    </div>
+
+    <div class="mt-4 flex items-center justify-between text-xs font-mono text-zinc-400 px-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Canvas tự động lưu sticker và lời chúc trên trình duyệt của bạn</span>
+      </div>
+      <button onclick="clearMyStickers()" class="hover:text-red-400 transition underline underline-offset-2">
+        Xóa sticker tôi đã dán
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Note Input Modal Popup -->
+  <div id="noteModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md glass-card rounded-3xl p-6 border border-white/20 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>Ghim Giấy Note Mới</span>
+          <span class="text-base">📌</span>
+        </h3>
+        <button onclick="closeNoteModal()" class="p-1 rounded-full hover:bg-white/10 text-zinc-400 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-mono text-zinc-300 mb-1">TÊN CỦA BẠN</label>
+          <input type="text" id="modalAuthor" placeholder="Ví dụ: Hoàng Nam (K20)" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white text-sm focus:outline-none focus:border-brand-gold">
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-zinc-300 mb-1">CHỌN MÀU GIẤY NOTE</label>
+          <div class="flex items-center gap-3">
+            <button onclick="selectNoteColor('gold', this)" class="modal-color-btn w-8 h-8 rounded-xl bg-[#FDE047] border-2 border-white ring-2 ring-brand-gold shadow"></button>
+            <button onclick="selectNoteColor('pink', this)" class="modal-color-btn w-8 h-8 rounded-xl bg-[#F472B6] border-2 border-transparent shadow"></button>
+            <button onclick="selectNoteColor('cyan', this)" class="modal-color-btn w-8 h-8 rounded-xl bg-[#67E8F9] border-2 border-transparent shadow"></button>
+            <button onclick="selectNoteColor('dark', this)" class="modal-color-btn w-8 h-8 rounded-xl bg-[#1E1E28] border-2 border-transparent shadow"></button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-zinc-300 mb-1">LỜI CHÚC / KỶ NIỆM</label>
+          <textarea id="modalContent" rows="3" placeholder="Nhập lời chúc tốt nghiệp thật ý nghĩa hoặc hài hước..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white text-sm focus:outline-none focus:border-brand-gold"></textarea>
+        </div>
+
+        <button onclick="submitNewNote()" class="w-full py-3 rounded-xl bg-brand-gold hover:bg-amber-400 text-black font-bold text-sm tracking-wide transition shadow-lg flex items-center justify-center gap-2">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>GHIM LÊN BỨC TƯỜNG (PIN IT)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full border-t border-white/5 py-6 text-center text-xs font-mono text-zinc-400 relative z-10">
+    <div class="flex items-center justify-center gap-2 mb-1">
+      <span>DESIGNED WITH</span>
+      <span class="text-red-400">♥</span>
+      <span>FOR INTERACTIVE EXPERIENCES</span>
+    </div>
+    <div class="text-[11px] text-zinc-500">The Graduation Hub & Yearbook Edition • 2026</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    lucide.createIcons();
+
+    // -------------------------------------------------------------
+    // Audio FX Synthesizer (Zero external audio files needed)
+    // -------------------------------------------------------------
+    let sfxEnabled = true;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new AudioContext();
+    }
+
+    function playBeep(freq = 440, type = 'sine', duration = 0.08) {
+      if (!sfxEnabled) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn("Audio Context blocked", e);
+      }
+    }
+
+    // Sticker Pop Sound Effect (Pitch bends upwards like a bubble pop)
+    function playStickerPop() {
+      if (!sfxEnabled) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        const startFreq = 260 + Math.random() * 80;
+        osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(startFreq * 2.4, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+      } catch (e) {}
+    }
+
+    function toggleAudioFx() {
+      sfxEnabled = !sfxEnabled;
+      const label = document.getElementById('soundLabel');
+      label.innerText = sfxEnabled ? 'SFX: ON' : 'SFX: OFF';
+      if (sfxEnabled) playBeep(880, 'triangle', 0.1);
+    }
+
+    // -------------------------------------------------------------
+    // Tab Navigation Switcher
+    // -------------------------------------------------------------
+    function switchTab(tab) {
+      playBeep(520, 'triangle', 0.05);
+      const viewTicket = document.getElementById('viewTicket');
+      const viewYearbook = document.getElementById('viewYearbook');
+      const btnTicket = document.getElementById('tabTicketBtn');
+      const btnYearbook = document.getElementById('tabYearbookBtn');
+
+      if (tab === 'ticket') {
+        viewTicket.classList.remove('hidden');
+        viewYearbook.classList.add('hidden');
+        btnTicket.className = "px-4 py-1.5 rounded-full text-xs font-medium transition bg-white/15 text-white shadow-sm flex items-center gap-1.5";
+        btnYearbook.className = "px-4 py-1.5 rounded-full text-xs font-medium transition text-zinc-400 hover:text-white flex items-center gap-1.5";
+      } else {
+        viewTicket.classList.add('hidden');
+        viewYearbook.classList.remove('hidden');
+        btnYearbook.className = "px-4 py-1.5 rounded-full text-xs font-medium transition bg-pink-500/20 text-pink-300 border border-pink-500/40 shadow-sm flex items-center gap-1.5";
+        btnTicket.className = "px-4 py-1.5 rounded-full text-xs font-medium transition text-zinc-400 hover:text-white flex items-center gap-1.5";
+      }
+      lucide.createIcons();
+    }
+
+    // -------------------------------------------------------------
+    // 3D Card Tilt Effect
+    // -------------------------------------------------------------
+    const wrapper = document.getElementById('ticketWrapper');
+    const card = document.getElementById('ticketCard');
+    const glare = document.getElementById('hologramGlare');
+
+    wrapper.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -14;
+      const rotateY = ((x - centerX) / centerX) * 16;
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+      glare.style.opacity = '0.7';
+      glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.4) 0%, rgba(99,102,241,0.2) 40%, transparent 80%)`;
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      glare.style.opacity = '0';
+    });
+
+    function updateTicketName(val) {
+      document.getElementById('ticketNameDisplay').innerText = val.trim() ? val : "Alex Tran";
+      playBeep(700 + Math.random() * 200, 'sine', 0.03);
+    }
+
+    function setThemeAccent(hex, name, el) {
+      playBeep(640, 'triangle', 0.08);
+      document.getElementById('dresscodeLabel').innerText = `Selected: ${name}`;
+      document.querySelectorAll('.swatch-btn').forEach(btn => {
+        btn.classList.remove('border-white', 'ring-2', 'ring-indigo-500/50');
+        btn.classList.add('border-transparent');
+      });
+      el.classList.remove('border-transparent');
+      el.classList.add('border-white', 'ring-2', 'ring-indigo-500/50');
+      card.style.borderColor = hex === '#0D0D12' ? 'rgba(255, 255, 255, 0.15)' : hex;
+    }
+
+    function handleRSVP(e) {
+      e.preventDefault();
+      playBeep(523.25, 'triangle', 0.1);
+      setTimeout(() => playBeep(659.25, 'triangle', 0.1), 100);
+      setTimeout(() => playBeep(783.99, 'triangle', 0.15), 200);
+      setTimeout(() => playBeep(1046.50, 'sine', 0.3), 300);
+
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.65 },
+        colors: ['#E2B857', '#6366F1', '#ffffff', '#10B981']
+      });
+
+      document.getElementById('rsvpSuccessAlert').classList.remove('hidden');
+    }
+
+    // -------------------------------------------------------------
+    // YEARBOOK & STICKER SLAP SYSTEM (Figma FigJam / Miro Style)
+    // -------------------------------------------------------------
+    let currentSticker = '🎓';
+    const board = document.getElementById('stickerBoard');
+    const stickersContainer = document.getElementById('stickersContainer');
+
+    function selectSticker(emoji, btn) {
+      currentSticker = emoji;
+      playBeep(680, 'sine', 0.06);
+      document.querySelectorAll('.sticker-btn').forEach(b => {
+        b.classList.remove('border-brand-gold', 'ring-2', 'ring-brand-gold/30');
+        b.classList.add('border-transparent');
+      });
+      btn.classList.remove('border-transparent');
+      btn.classList.add('border-brand-gold', 'ring-2', 'ring-brand-gold/30');
+    }
+
+    function handleBoardClick(e) {
+      // Don't trigger if clicked on a note or modal
+      if (e.target.closest('.sticky-note') || e.target.closest('#noteModal')) return;
+
+      const rect = board.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      createStickerAt(currentSticker, x, y);
+      playStickerPop();
+      saveSticker(currentSticker, x, y);
+    }
+
+    function createStickerAt(emoji, x, y, rot = null) {
+      const rotation = rot !== null ? rot : (Math.random() * 40 - 20);
+      const sticker = document.createElement('div');
+      sticker.className = 'sticker-placed absolute select-none text-4xl sm:text-5xl filter drop-shadow-lg';
+      sticker.style.setProperty('--rot', `${rotation}deg`);
+      sticker.style.left = `${x - 24}px`;
+      sticker.style.top = `${y - 24}px`;
+      sticker.innerText = emoji;
+
+      // Allow dragging stickers
+      makeDraggable(sticker);
+      stickersContainer.appendChild(sticker);
+    }
+
+    // Drag-and-drop mechanism for stickers & notes
+    function makeDraggable(el) {
+      let isDragging = false;
+      let startX, startY, origLeft, origTop;
+
+      el.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        origLeft = parseInt(el.style.left, 10) || el.offsetLeft;
+        origTop = parseInt(el.style.top, 10) || el.offsetTop;
+        el.style.zIndex = 50;
+        e.stopPropagation();
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        el.style.left = `${origLeft + dx}px`;
+        el.style.top = `${origTop + dy}px`;
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          playBeep(320, 'sine', 0.04);
+        }
+      });
+    }
+
+    // Local Storage persistence for stickers
+    function saveSticker(emoji, x, y) {
+      const stored = JSON.parse(localStorage.getItem('grad_stickers') || '[]');
+      stored.push({ emoji, x, y, rot: (Math.random() * 40 - 20) });
+      localStorage.setItem('grad_stickers', JSON.stringify(stored));
+    }
+
+    function loadSavedStickers() {
+      const stored = JSON.parse(localStorage.getItem('grad_stickers') || '[]');
+      stored.forEach(s => createStickerAt(s.emoji, s.x, s.y, s.rot));
+    }
+
+    function clearMyStickers() {
+      localStorage.removeItem('grad_stickers');
+      stickersContainer.innerHTML = '';
+      playBeep(280, 'sawtooth', 0.1);
+    }
+
+    // Like sticky note
+    function likeNote(btn, e) {
+      e.stopPropagation();
+      playBeep(880, 'sine', 0.08);
+      const cntSpan = btn.querySelector('.like-cnt');
+      let cnt = parseInt(cntSpan.innerText, 10);
+      cntSpan.innerText = cnt + 1;
+      btn.classList.add('scale-125');
+      setTimeout(() => btn.classList.remove('scale-125'), 150);
+    }
+
+    // -------------------------------------------------------------
+    // NOTE MODAL & CUSTOM STICKY CREATOR
+    // -------------------------------------------------------------
+    let selectedNoteColor = 'gold';
+
+    function openNoteModal() {
+      playBeep(520, 'triangle', 0.06);
+      document.getElementById('noteModal').classList.remove('hidden');
+    }
+
+    function closeNoteModal() {
+      document.getElementById('noteModal').classList.add('hidden');
+    }
+
+    function selectNoteColor(color, btn) {
+      selectedNoteColor = color;
+      playBeep(600, 'sine', 0.05);
+      document.querySelectorAll('.modal-color-btn').forEach(b => {
+        b.classList.remove('border-white', 'ring-2', 'ring-brand-gold');
+        b.classList.add('border-transparent');
+      });
+      btn.classList.remove('border-transparent');
+      btn.classList.add('border-white', 'ring-2', 'ring-brand-gold');
+    }
+
+    function submitNewNote() {
+      const author = document.getElementById('modalAuthor').value.trim() || 'Người bạn giấu tên';
+      const content = document.getElementById('modalContent').value.trim();
+      if (!content) {
+        alert('Vui lòng nhập lời chúc của bạn nhé!');
+        return;
+      }
+
+      playStickerPop();
+      confetti({
+        particleCount: 50,
+        spread: 40,
+        origin: { y: 0.5 },
+        colors: ['#FEF08A', '#F472B6', '#67E8F9']
+      });
+
+      // Color maps
+      const colorSchemes = {
+        gold: { bg: 'from-[#FEF08A] to-[#FDE047]', text: 'text-zinc-900', border: 'border-amber-300', header: 'text-amber-900' },
+        pink: { bg: 'from-[#FBCFE8] to-[#F472B6]', text: 'text-zinc-900', border: 'border-pink-300', header: 'text-pink-950' },
+        cyan: { bg: 'from-[#A5F3FC] to-[#67E8F9]', text: 'text-zinc-900', border: 'border-cyan-300', header: 'text-cyan-950' },
+        dark: { bg: 'from-[#181824] to-[#12121A]', text: 'text-white', border: 'border-white/20', header: 'text-indigo-400' }
+      };
+
+      const c = colorSchemes[selectedNoteColor] || colorSchemes.gold;
+      const rot = (Math.random() * 6 - 3).toFixed(1);
+
+      // Random position inside board
+      const randX = Math.floor(Math.random() * 200 + 40);
+      const randY = Math.floor(Math.random() * 150 + 120);
+
+      const note = document.createElement('div');
+      note.className = `sticky-note absolute w-64 p-5 rounded-2xl shadow-2xl bg-gradient-to-br ${c.bg} ${c.text} ${c.border} border`;
+      note.style.left = `${randX}px`;
+      note.style.top = `${randY}px`;
+      note.style.transform = `rotate(${rot}deg)`;
+      note.style.zIndex = '35';
+      note.onclick = (e) => e.stopPropagation();
+
+      note.innerHTML = `
+        <div class="flex items-center justify-between border-b border-black/10 pb-2 mb-3">
+          <span class="text-xs font-mono font-bold uppercase tracking-wider ${c.header}">★ ${author}</span>
+          <span class="text-base">📌</span>
+        </div>
+        <p class="font-handwriting text-2xl leading-snug font-bold mb-4">
+          ${content}
+        </p>
+        <div class="flex items-center justify-between text-xs font-mono opacity-80">
+          <span>Vừa xong</span>
+          <button onclick="likeNote(this, event)" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/10 hover:bg-black/20 font-bold transition">
+            <span>❤️</span> <span class="like-cnt">1</span>
+          </button>
+        </div>
+      `;
+
+      document.getElementById('notesContainer').appendChild(note);
+      makeDraggable(note);
+
+      // Reset & close modal
+      document.getElementById('modalContent').value = '';
+      closeNoteModal();
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedStickers();
+      // Make pre-existing notes draggable too
+      document.querySelectorAll('.sticky-note').forEach(makeDraggable);
+    });
+
+    // Countdown timer
+    let secondsLeft = 42 * 86400 + 14 * 3600 + 59 * 60;
+    setInterval(() => {
+      if (secondsLeft > 0) secondsLeft--;
+      const d = Math.floor(secondsLeft / 86400);
+      const h = Math.floor((secondsLeft % 86400) / 3600);
+      const m = Math.floor((secondsLeft % 3600) / 60);
+      document.getElementById('cntDays').innerText = d;
+      document.getElementById('cntHours').innerText = h < 10 ? '0' + h : h;
+      document.getElementById('cntMins').innerText = m < 10 ? '0' + m : m;
+    }, 1000);
+  </script>
+</body>
+</html>

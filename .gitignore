@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Next.js / Vercel
+.next/
+.vercel/
+out/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+!.env.test.example
+
+# Guest seed / generated link exports
+guests.csv
+links.csv
+
+# Test / coverage
+test-results/
+playwright-report/
+coverage/
+*.lcov
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+
+# IDE (keep skills; ignore secret-bearing local Cursor files)
+.cursor/mcp.json
+.idea/
+.vscode/
+
+# Build / package
+dist/
+build/
+*.tsbuildinfo
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
