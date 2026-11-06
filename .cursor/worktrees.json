@@ -1,0 +1,7 @@
+{
+  "setup-worktree-windows": [
+    "if (Test-Path \"%ROOT_WORKTREE_PATH%\\.env.local\") { Copy-Item \"%ROOT_WORKTREE_PATH%\\.env.local\" .env.local -Force }",
+    "if (Test-Path \"%ROOT_WORKTREE_PATH%\\.env.test\") { Copy-Item \"%ROOT_WORKTREE_PATH%\\.env.test\" .env.test -Force }",
+    "if (Test-Path package.json) { pnpm install }"
+  ]
+}

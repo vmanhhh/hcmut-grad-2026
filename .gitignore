@@ -42,3 +42,8 @@ build/
 # Supabase local
 supabase/.temp/
 supabase/.branches/
+next-env.d.ts
+
+# Local dev artifacts
+screenshots*/
+.claude/

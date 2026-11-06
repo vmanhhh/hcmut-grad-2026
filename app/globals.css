@@ -1,0 +1,298 @@
+@import "tailwindcss";
+
+/* Dark + gold tokens ported from prototype/index.html */
+@theme {
+  --color-brand-gold: #e2b857;
+  --color-brand-accent: #6366f1;
+  --color-brand-dark: #08080a;
+  --color-brand-card: #121217;
+  --color-brand-border: rgba(255, 255, 255, 0.08);
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+  --font-display: var(--font-space), var(--font-jakarta), sans-serif;
+  --font-pixel: var(--font-vt323), monospace;
+  --font-hand: var(--font-dancing), cursive;
+  --radius-card: 1.5rem;
+  --shadow-gold: 0 10px 40px -10px rgba(226, 184, 87, 0.35);
+}
+
+html {
+  background: var(--color-brand-dark);
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-brand-dark);
+  color: #f3f4f6;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+.bg-mesh {
+  background-image:
+    radial-gradient(at 15% 10%, rgba(99, 102, 241, 0.15) 0px, transparent 45%),
+    radial-gradient(at 85% 10%, rgba(226, 184, 87, 0.12) 0px, transparent 45%),
+    radial-gradient(at 50% 60%, rgba(139, 92, 246, 0.1) 0px, transparent 55%);
+}
+
+/* Card face: tilt target */
+.ticket-wrapper {
+  perspective: 1200px;
+}
+.ticket-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  background: linear-gradient(145deg, #181820 0%, #101015 60%, #17140c 100%);
+  border: 1px solid rgba(226, 184, 87, 0.25);
+  box-shadow: var(--shadow-gold);
+}
+
+/*
+ * Invitation card in the game's pixel language: purple panels (#1b1a38 / #2b2a52), gold border (#f2c75a), red ribbon,
+ * stepped corners, hard offset shadow, no blur or round corners. The holo layers are hard-edged colour bands.
+ * --mx/--my/--holo are set by TiltCard from the pointer.
+ */
+.ticket-wrapper {
+  filter: drop-shadow(6px 6px 0 #0b0a1c);
+}
+.holo-card {
+  --mx: 50%;
+  --my: 50%;
+  --holo: 0;
+  --notch: 8px;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.pixel-card {
+  padding: 4px;
+  background: #f2c75a;
+  clip-path: polygon(
+    0 var(--notch), 4px var(--notch), 4px 4px, var(--notch) 4px, var(--notch) 0,
+    calc(100% - var(--notch)) 0, calc(100% - var(--notch)) 4px, calc(100% - 4px) 4px, calc(100% - 4px) var(--notch), 100% var(--notch),
+    100% calc(100% - var(--notch)), calc(100% - 4px) calc(100% - var(--notch)), calc(100% - 4px) calc(100% - 4px), calc(100% - var(--notch)) calc(100% - 4px), calc(100% - var(--notch)) 100%,
+    var(--notch) 100%, var(--notch) calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - var(--notch)), 0 calc(100% - var(--notch))
+  );
+}
+.pixel-card-in {
+  background:
+    radial-gradient(rgba(242, 199, 90, 0.1) 1.5px, transparent 1.5px) 0 0 / 16px 16px,
+    #2b2a52;
+  box-shadow: inset 0 0 0 4px #1b1a38;
+  padding: 1rem;
+  color: #fff3c4;
+  font-family: var(--font-sans);
+}
+@media (min-width: 640px) {
+  .pixel-card-in {
+    padding: 2rem;
+  }
+}
+/* Page background in the game's palette: grass green with darker tufts and light flecks */
+.bg-grass {
+  background-color: #5eb04d;
+  background-image:
+    radial-gradient(#7fcb68 1.5px, transparent 1.6px),
+    radial-gradient(#4a9a3e 2px, transparent 2.1px),
+    radial-gradient(#f2c75a 1.5px, transparent 1.6px),
+    radial-gradient(#fff 1.5px, transparent 1.6px);
+  background-size: 28px 28px, 36px 36px, 150px 150px, 190px 190px;
+  background-position: 0 0, 14px 18px, 40px 70px, 120px 20px;
+}
+.pixel-title {
+  /* Display sans — VT323 clipped Vietnamese marks and looked tiny on phones */
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 6.5vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: #f2c75a;
+  text-shadow: 2px 2px 0 #1b1a38;
+}
+.pixel-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 6vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff3c4;
+  text-shadow: 2px 2px 0 #b02f36;
+  overflow-wrap: anywhere;
+}
+.pixel-ribbon {
+  display: inline-block;
+  background: #b02f36;
+  border: 2px solid #f2c75a;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+.pixel-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b8b3e6;
+}
+.pixel-box {
+  background: #1b1a38;
+  border: 2px solid rgba(242, 199, 90, 0.55);
+  padding: 0.75rem 0.85rem;
+}
+.pixel-chip {
+  display: inline-block;
+  background: #f2c75a;
+  color: #1b1a38;
+  font-weight: 800;
+  padding: 0.05rem 0.45rem;
+  border: 2px solid #1b1a38;
+  box-shadow: 2px 2px 0 #b02f36;
+}
+.pixel-perf {
+  border-top: 4px dashed rgba(242, 199, 90, 0.7);
+}
+/* graduate sprite from the game (16x24 frame, shown 4x, nearest-neighbour) */
+.pixel-host {
+  width: 48px;
+  height: 72px;
+  background: url("/game/sprites/host-graduate.png") 0 0 / 240px 288px no-repeat;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .pixel-host {
+    width: 64px;
+    height: 96px;
+    background-size: 320px 384px;
+  }
+}
+.holo-foil,
+.holo-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+.holo-foil {
+  background: repeating-linear-gradient(
+    115deg,
+    #6366f1 0 14px,
+    #22d3ee 14px 28px,
+    #f2c75a 28px 42px,
+    #ec4899 42px 56px
+  );
+  background-size: 300% 300%;
+  background-position: var(--mx) var(--my);
+  mix-blend-mode: overlay;
+  opacity: calc(var(--holo) * 0.32);
+  transition: opacity 0.2s steps(3);
+}
+.holo-glare {
+  background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.3) 0 22px, rgba(255, 255, 255, 0.12) 22px 56px, transparent 56px);
+  mix-blend-mode: overlay;
+  opacity: var(--holo);
+  transition: opacity 0.2s steps(3);
+}
+/* The tilt + foil follow the guest's own finger / pointer, so they stay on even with "reduce motion" (many desktops keep that OS option on). */
+
+.panel {
+  background: var(--color-brand-card);
+  border: 1px solid var(--color-brand-border);
+  border-radius: var(--radius-card);
+}
+
+/* 44px minimum touch targets */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.875rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f3f4f6;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+/* Narrow rows of buttons (journey header, transport picker): never wrap the label, keep 44px height */
+.btn-compact {
+  padding: 0.5rem 0.6rem;
+  font-size: 0.8rem;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+.btn-gold {
+  background: linear-gradient(90deg, #e2b857, #fbbf24 60%, #eab308);
+  color: #111;
+  border-color: transparent;
+}
+.btn-gold:hover {
+  background: linear-gradient(90deg, #ebc56d, #fcc93b 60%, #f0be1d);
+}
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+.btn:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-brand-gold);
+  outline-offset: 2px;
+}
+
+.field {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-size: 1rem; /* 16px: stops iOS zoom on focus */
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+.choice:has(input:checked) {
+  border-color: var(--color-brand-gold);
+  background: rgba(226, 184, 87, 0.12);
+}
+.choice input {
+  accent-color: var(--color-brand-gold);
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* Reduced motion: no tilt, transitions or animations on the card and prompts (FR-008, FR-018) */
+@media (prefers-reduced-motion: reduce) {
+  .ticket-card,
+  .panel,
+  .btn,
+  .journey-prompt,
+  .journey-prompt * {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,557 @@
+[
+  {
+    "year": 1,
+    "place": "gate",
+    "title": "Năm nhất · Cổng trường",
+    "subtitle": "Những ngày đầu tiên ở Bách khoa.",
+    "events": [
+      {
+        "id": "y1-first-flight-to-hcmut",
+        "title": "First flight to hcmut",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/first-flight-to-hcmut-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y1-day-1-at-ktx-khu-a",
+        "title": "Day 1 at KTX Khu A",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/day-1-at-ktx-khu-a-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y1-shcd-dau-tien",
+        "title": "SHCD đầu tiên",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/shcd-dau-tien-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y1-khai-giang",
+        "title": "Khai giảng",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/khai-giang-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y1-one-day",
+        "title": "One day",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/one-day-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y1-trip-dau-tien-cung-nhung-nguoi-ban-nguoi",
+        "title": "Trip đầu tiên cùng những người bạn, người nhà mới",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/trip-dau-tien-cung-nhung-nguoi-ban-nguoi-1.webp",
+            "w": 1280,
+            "h": 960
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y1/trip-dau-tien-cung-nhung-nguoi-ban-nguoi-2.webp",
+            "w": 1280,
+            "h": 853
+          }
+        ]
+      },
+      {
+        "id": "y1-mhx-dau-tien",
+        "title": "MHX đầu tiên",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/mhx-dau-tien-1.webp",
+            "w": 1280,
+            "h": 853
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y1/mhx-dau-tien-2.webp",
+            "w": 1280,
+            "h": 960
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y1/mhx-dau-tien-3.webp",
+            "w": 1280,
+            "h": 960
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y1/mhx-dau-tien-4.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y1-hoc-quoc-phong",
+        "title": "Học quốc phòng",
+        "items": [
+          {
+            "kind": "video",
+            "src": "/memories/y1/hoc-quoc-phong-1.mp4",
+            "poster": "/memories/y1/hoc-quoc-phong-1.webp",
+            "w": 540,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y1-kiem-tra",
+        "title": "Kiểm tra",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/kiem-tra-1.webp",
+            "w": 1280,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y1-nhung-nguoi-ban-moi",
+        "title": "Những người bạn mới",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/nhung-nguoi-ban-moi-1.webp",
+            "w": 1280,
+            "h": 852
+          }
+        ]
+      },
+      {
+        "id": "y1-overnight",
+        "title": "Overnight",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y1/overnight-1.webp",
+            "w": 1280,
+            "h": 1280
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "year": 2,
+    "place": "building",
+    "title": "Năm hai · Trước tòa nhà chính",
+    "subtitle": "Hoạt động, đoàn hội, bạn bè mới.",
+    "events": [
+      {
+        "id": "y2-media-cse",
+        "title": "Media CSE",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y2/media-cse-1.webp",
+            "w": 960,
+            "h": 1280
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y2/media-cse-2.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y2-dan-em-dau-tien",
+        "title": "Đàn em đầu tiên",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y2/dan-em-dau-tien-1.webp",
+            "w": 1280,
+            "h": 720
+          }
+        ]
+      },
+      {
+        "id": "y2-dem-bach-khoa-mat-dien",
+        "title": "Đêm bách khoa mất điện",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y2/dem-bach-khoa-mat-dien-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y2-media-lo",
+        "title": "Media Lỏ",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y2/media-lo-1.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y2-xuan-tinh-nguyen",
+        "title": "Xuân tình nguyên",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y2/xuan-tinh-nguyen-1.webp",
+            "w": 1280,
+            "h": 853
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y2/xuan-tinh-nguyen-2.webp",
+            "w": 1280,
+            "h": 853
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y2/xuan-tinh-nguyen-3.webp",
+            "w": 1280,
+            "h": 960
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y2/xuan-tinh-nguyen-4.webp",
+            "w": 1280,
+            "h": 853
+          }
+        ]
+      },
+      {
+        "id": "y2-da-lat-cung-doan-hoi",
+        "title": "Đà lạt cùng đoàn hội",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y2/da-lat-cung-doan-hoi-1.webp",
+            "w": 1280,
+            "h": 960
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y2/da-lat-cung-doan-hoi-2.webp",
+            "w": 1280,
+            "h": 853
+          }
+        ]
+      },
+      {
+        "id": "y2-papa-bao-bi",
+        "title": "Papa Bảo Bí",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y2/papa-bao-bi-1.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y2-first-night-cung-lbd",
+        "title": "First night cùng LBĐ",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y2/first-night-cung-lbd-1.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "year": 3,
+    "place": "hall",
+    "title": "Năm ba · Trong tòa nhà",
+    "subtitle": "Năm của những chặng đường dài.",
+    "events": [
+      {
+        "id": "y3-nha-c24-07",
+        "title": "Nhà C24.07",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y3/nha-c24-07-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y3-trip-cuoi-cung-cung-doan-hoi",
+        "title": "Trip cuối cùng cùng Đoàn Hội",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y3/trip-cuoi-cung-cung-doan-hoi-1.webp",
+            "w": 1280,
+            "h": 853
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "year": 4,
+    "place": "stage",
+    "title": "Năm tư · Trước hội trường",
+    "subtitle": "Một chặng nữa là tới ngày nhận bằng.",
+    "events": [
+      {
+        "id": "y4-party-welcome-nguoi-moi",
+        "title": "Party welcome người mới",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/party-welcome-nguoi-moi-1.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y4-trekking-cung-cong-ty-dau-tien",
+        "title": "Trekking cùng công ty đầu tiên",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/trekking-cung-cong-ty-dau-tien-1.webp",
+            "w": 1280,
+            "h": 960
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/trekking-cung-cong-ty-dau-tien-2.webp",
+            "w": 960,
+            "h": 1280
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/trekking-cung-cong-ty-dau-tien-3.webp",
+            "w": 960,
+            "h": 1280
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/trekking-cung-cong-ty-dau-tien-4.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y4-lan-dau-lam-sale",
+        "title": "Lần đầu làm Sale",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/lan-dau-lam-sale-1.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y4-k22",
+        "title": "K22",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/k22-1.webp",
+            "w": 1280,
+            "h": 853
+          }
+        ]
+      },
+      {
+        "id": "y4-anh-em-nha-d1107",
+        "title": "Anh em nhà D1107",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/anh-em-nha-d1107-1.webp",
+            "w": 960,
+            "h": 1280
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/anh-em-nha-d1107-2.webp",
+            "w": 960,
+            "h": 1280
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/anh-em-nha-d1107-3.webp",
+            "w": 960,
+            "h": 1280
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/anh-em-nha-d1107-4.webp",
+            "w": 720,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y4-tat-nien-cung-nhung-dong-nghiep-de-thuon",
+        "title": "Tất niên cùng những đồng nghiệp dễ thương",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/tat-nien-cung-nhung-dong-nghiep-de-thuon-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y4-sinh-nhat-cong-ty",
+        "title": "Sinh nhật công ty",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/sinh-nhat-cong-ty-1.webp",
+            "w": 1280,
+            "h": 853
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/sinh-nhat-cong-ty-2.webp",
+            "w": 1280,
+            "h": 853
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/sinh-nhat-cong-ty-3.webp",
+            "w": 1280,
+            "h": 853
+          }
+        ]
+      },
+      {
+        "id": "y4-trip-cung-nhung-nguoi-de-thung",
+        "title": "Trip cùng những người dễ thưng",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/trip-cung-nhung-nguoi-de-thung-1.webp",
+            "w": 1280,
+            "h": 853
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/trip-cung-nhung-nguoi-de-thung-2.webp",
+            "w": 960,
+            "h": 1280
+          },
+          {
+            "kind": "image",
+            "src": "/memories/y4/trip-cung-nhung-nguoi-de-thung-3.webp",
+            "w": 1280,
+            "h": 853
+          }
+        ]
+      },
+      {
+        "id": "y4-nha-trung-nhut-dong-thap",
+        "title": "Nhà Trung Nhựt · Đồng Tháp",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/nha-trung-nhut-dong-thap-1.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      },
+      {
+        "id": "y4-ban-hoc-moi-tot-nghiep",
+        "title": "Bạn học mời tốt nghiệp",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/ban-hoc-moi-tot-nghiep-1.webp",
+            "w": 1280,
+            "h": 854
+          }
+        ]
+      },
+      {
+        "id": "y4-company-trip-dau-tien",
+        "title": "Company trip đầu tiên",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/company-trip-dau-tien-1.webp",
+            "w": 1280,
+            "h": 960
+          }
+        ]
+      },
+      {
+        "id": "y4-nhau",
+        "title": "Nhậu",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/nhau-1.webp",
+            "w": 1020,
+            "h": 1020
+          }
+        ]
+      },
+      {
+        "id": "y4-trip-cuoi-cung-cung-k22",
+        "title": "Trip cuối cùng cùng K22",
+        "items": [
+          {
+            "kind": "image",
+            "src": "/memories/y4/trip-cuoi-cung-cung-k22-1.webp",
+            "w": 960,
+            "h": 1280
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -72,7 +72,7 @@ From the card, the guest adds the event to their calendar and opens map directio
 
 ### User Story 3 - First-visit playable journey (Priority: P2)
 
-On first visit, the guest plays a 2–4 minute side-scrolling pixel journey as the host — Gate 2022, Memory hallway, Project alcove, Stage doors, Podium/diploma, Letter — and the letter reveals their personal message before transitioning into the card.
+On first visit, the guest plays a 2–4 minute top-down (3/4 view) pixel-art walking journey as the host, a one-way path through a bright JRPG-style town and campus, — Gate 2022, Memory hallway, Project alcove, Stage doors, Podium/diploma, Letter — and the letter reveals their personal message before transitioning into the card.
 
 **Why this priority**: It is the delight factor that makes the invite memorable, but the invite works without it.
 
@@ -81,11 +81,11 @@ On first visit, the guest plays a 2–4 minute side-scrolling pixel journey as t
 **Acceptance Scenarios**:
 
 1. **Given** a first visit, **When** the link opens, **Then** the journey starts with a short move/interact tutorial.
-2. **Given** the journey, **When** the guest moves (A/D or arrows on PC; on-screen buttons or tap-to-walk on mobile) and interacts (E / Space / click; tap a glowing frame), **Then** memory frames show photo + caption.
+2. **Given** the journey, **When** the guest walks in four directions (WASD or arrows on PC; an on-screen D-pad with targets of at least 44 px, or tap-to-walk toward the tapped point along the path, on mobile) and interacts (E / Space / click; tap a glowing frame or the on-screen E button), **Then** memory frames show photo + caption, and E, Space or Esc closes the popup.
 3. **Given** any point of the journey, **When** the guest taps "Vào thiệp mời", **Then** they go straight to the card.
 4. **Given** a cutscene, **When** the guest taps Skip, **Then** the cutscene ends.
-5. **Given** the journey, **Then** there is no combat, no lives, and no obstacle that can block progress.
-6. **Given** the host sprite, **When** the guest moves between zones, **Then** the outfit evolves (freshman → student → formal on stage).
+5. **Given** the journey, **Then** there is no combat, no lives, no precision jumps, and no obstacle that can block progress: the path is one-way and linear (no free roam), and the portrait phone layout keeps sprites and text readable.
+6. **Given** the host sprite, **When** the guest moves between zones, **Then** the outfit evolves (freshman at the gate → student in the hallway and project alcove → graduate in a blue gown and cap on stage; the diploma scene shows the red "BẰNG CỬ NHÂN" folder).
 
 ---
 
@@ -176,7 +176,7 @@ The host creates and edits guests (display name, role, message title/body) and v
 
 **Calendar & directions**
 
-- **FR-010**: Calendar MUST be offered as a downloadable calendar file and as Google Calendar links, with time zone Asia/Ho_Chi_Minh, location, description (invite link, meeting tip, gate summary, contact) and reminders (24 hours and 90 minutes before). Before RSVP both windows are offered; after the guest picks a window, only that window is offered.
+- **FR-010**: Calendar MUST be offered as a downloadable calendar file and as Google Calendar links, with time zone Asia/Ho_Chi_Minh, location, description (invite link, meeting tip, gate summary, contact) and reminders (24 hours and 90 minutes before) in the downloadable calendar file; the Google Calendar link cannot set reminders and uses the calendar default reminder, which the card says explicitly. Before RSVP both windows are offered; after the guest picks a window, only that window is offered.
 - **FR-010a**: Calendar and map actions MUST work inside the Zalo and Messenger in-app browsers, or offer a fallback (open in browser / copy details).
 - **FR-011**: Directions MUST open a maps app at the host's single fixed meeting point; each gate card MUST open maps at that gate.
 
@@ -189,7 +189,7 @@ The host creates and edits guests (display name, role, message title/body) and v
 
 **Journey**
 
-- **FR-015**: The journey MUST follow Gate 2022 → Memory hallway → Project alcove → Stage doors → Podium/diploma → Letter → Card, take about 2–4 minutes, and contain no combat, lives or precision jumps.
+- **FR-015**: The journey MUST be a top-down (3/4 view) pixel-art world walked in four directions (keyboard, on-screen D-pad, tap-to-walk along the path) and follow one linear, one-way path: Gate 2022 → Memory hallway → Project alcove → Stage doors → Podium/diploma → Letter → Card. It takes about 2–4 minutes and contains no combat, lives, precision jumps or blockers, and no free roam. It renders crisply (integer pixel zoom) and fills portrait phones.
 - **FR-016**: Memory content (photos, captions, years) MUST be editable without changing game logic.
 - **FR-017**: The Letter scene MUST show this guest's personal message.
 - **FR-018**: Under reduced motion or low power, the journey MUST be replaced by stacked chapters or an auto-walk cinematic with the same content, ending on the card.
@@ -233,4 +233,4 @@ The host creates and edits guests (display name, role, message title/body) and v
 - Audio is off until the first user interaction (browser autoplay rules) and can be muted.
 - Number of guests is small (tens, not thousands).
 - Accepted risk: forwarding a link shares that guest's message.
-- Out of scope: guest login, expiry/one-time links, free-roam 3D campus, combat/hard platforming, multiplayer, indoor routing SDK, gyro tilt (later).
+- Out of scope: guest login, expiry/one-time links, free-roam 3D campus, combat, precision jumping, multiplayer, indoor routing SDK, gyro tilt (later).

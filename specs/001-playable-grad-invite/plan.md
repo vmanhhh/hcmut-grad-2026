@@ -10,7 +10,7 @@ This is a secret-link invitation for Trần Văn Mạnh's HCMUT graduation (Satu
 
 A single Next.js 16 app on Vercel server-renders a personalized, tiltable invite card. The card has RSVP (with a choice of time slot), calendar actions (calendar file plus Google Calendar), maps directions, a gate and parking guide, and call and Zalo buttons. Guest data lives in Supabase Postgres and is reached only from server code.
 
-A Phaser 4 side-scrolling journey loads lazily as an overlay on top of the already-rendered card. It always ends on the card, can be skipped from the first frame, and is replaced by stacked chapters under reduced motion.
+A Phaser 4 top-down (3/4 view, 16×16 tiles, four-direction walking) journey loads lazily as an overlay on top of the already-rendered card. It always ends on the card, can be skipped from the first frame, and is replaced by stacked chapters under reduced motion.
 
 Delivery happens in two releases:
 - **A**: the card only (`journey_version = 0`). Links go out about 12/11.
@@ -149,7 +149,7 @@ prototype/index.html            # existing prototype, kept for visual reference
 | Gate pins + walking photos/text per gate | ~20/11 | Gate step content (placeholders until then) |
 | 5 hallway photos (2022–2026) + 1 project photo, captions | ~14/11 | Journey content |
 | Guest list (`guests.csv`) with messages | before release A | Sending links |
-| Photo / description of your look per outfit (freshman, student, formal) | ~13/11 | Custom host sprite |
+| Photo / description of your look per outfit (freshman, student, graduate) | ~13/11 | Custom host sprite |
 
 ## Complexity Tracking
 

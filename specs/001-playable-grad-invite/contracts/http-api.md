@@ -9,7 +9,7 @@ The base URL is `https://manh-totnghiep.vercel.app`. All responses carry `Cache-
 | Case | Page `/i/{code}` | API |
 |------|------------------|-----|
 | Unknown or malformed code | 404, "Thiệp không hợp lệ" page | `404 {"error":"invalid_invite"}` |
-| Rate limit exceeded (30 lookups / 10 min / IP) | 429, "Bạn thử lại sau ít phút nhé" page | `429 {"error":"rate_limited"}` + `Retry-After` |
+| Rate limit exceeded (page: 30 lookups / 10 min / IP; api: 60 / 10 min / code + IP; known link-preview crawlers: 300 / 10 min / IP on the page) | 429, "Bạn thử lại sau ít phút nhé" page | `429 {"error":"rate_limited"}` + `Retry-After` |
 | Bad body | — | `400 {"error":"bad_request","field":"…"}` |
 
 The error bodies are identical for every unknown code, and response timing doesn't depend on whether a near-match exists.

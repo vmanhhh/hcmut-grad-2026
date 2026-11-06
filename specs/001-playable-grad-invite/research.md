@@ -18,8 +18,8 @@ Versions checked against npm on 2026-11-05: next 16.4.5, react 19.3.1, phaser 4.
 
 ## R3. Game engine
 
-- **Decision**: Phaser **4.2** (current stable), with arcade physics only, `pixelArt: true` and Scale Manager `FIT` at a fixed internal resolution (e.g. 480×270). There is one scene per zone group: Boot, Hallway (Gate → Memory → Project), Stage (Stage doors → Podium/diploma) and Letter.
-- **Rationale**: The spec named Phaser 3, but 4.x is the maintained line and its core API (scenes, arcade, input, loader) is largely the same. Everything this journey needs (side-scrolling, parallax, tweens, particles) is core.
+- **Decision**: Phaser **4.2** (current stable), with `pixelArt: true` and Scale Manager `NONE` at an **integer CSS zoom** (the internal resolution is derived from the container: about 400 px wide on landscape, about 190 px wide and as tall as the screen on portrait phones). Movement is custom 4-direction code on a one-way path (no physics engine needed). There is one scene per zone group: Boot, Campus (Gate → street → main hall), Hallway (Memory hallway → Project alcove), Stage (Stage doors → Podium/diploma) and Letter.
+- **Rationale**: The spec named Phaser 3, but 4.x is the maintained line and its core API (scenes, arcade, input, loader) is largely the same. Everything this journey needs (top-down camera follow, tweens, particles) is core.
 - **Fallback**: If an asset-pack or plugin incompatibility shows up, pin `phaser@3.90` and keep the same scene code. This is low risk because there are no third-party plugins.
 - **Alternatives**: Kaboom/Kaplay (smaller, but weaker scaling and input on mobile) and hand-written canvas code (too slow to build in 2 weeks) were rejected.
 
@@ -31,7 +31,7 @@ Versions checked against npm on 2026-11-05: next 16.4.5, react 19.3.1, phaser 4.
 
 ## R5. Rate limiting code lookups
 
-- **Decision**: A Postgres function `check_rate_limit(key text, max int, window_s int)` with a fixed window over a `rate_limits` table. The key is a hash of the client IP plus a salt. Limit: 30 code lookups per 10 minutes per IP. Above the limit, the page shows "Bạn thử lại sau ít phút nhé".
+- **Decision**: A Postgres function `check_rate_limit(key text, max int, window_s int)` with a fixed window over a `rate_limits` table. The key is a hash of the client IP plus a salt. Limits: page lookups 30 per 10 minutes per IP; api calls (open, rsvp, calendar) 60 per 10 minutes per code + IP, because households and venue Wi-Fi share IPs; known link-preview crawlers get a separate 300 per 10 minutes bucket so bulk-sent links keep their previews. Above the limit, the page shows "Bạn thử lại sau ít phút nhé".
 - **Rationale**: This needs no extra service (Principle V). With 12-character codes (R6) brute force is already infeasible; the limit just blocks noisy scanning.
 - **Alternatives**: Upstash Redis was rejected as an extra service, and in-memory limiting doesn't work across serverless instances.
 
@@ -78,7 +78,12 @@ Checked against the Google Fonts metadata:
 | ~~Caveat~~ (used in the prototype) | — | **no**: it drops diacritics, so it's replaced |
 | Pixelify Sans, Silkscreen, Press Start 2P | — | no: don't use them |
 
-- **Decision**: Load the fonts with `next/font/google` and `subsets: ['vietnamese','latin']`. Phaser text uses VT323 and only starts after `document.fonts.load('16px VT323')` resolves.
+- **Decision** (revised): Fonts are loaded with `next/font/google` and `subsets: ['vietnamese','latin']`. In-game Phaser text now uses **Plus Jakarta Sans Bold** (role "pixel" in `game/context.ts`; already loaded for the card) and **Dancing Script** for the letter. VT323 stays loaded but is no longer used by the game.
+- **Why VT323 was dropped**: it does contain every Vietnamese glyph, but the Phaser canvas is rendered at game-pixel size and scaled up by CSS, so VT323's 1/25 em thick stacked marks (Ẫ, Ẳ, Ể, Ợ ...) collapse to nothing. Plus Jakarta Sans has marks designed for small sizes.
+- **Fallback bug (the visible "mixed fonts")**: next/font splits each family into unicode-range subsets (latin, latin-ext, vietnamese) that the browser loads lazily. `document.fonts.load('16px X')` without a text sample only loaded the latin subset, so Phaser measured and drew every Vietnamese-only letter (Ư, Ạ, Ẳ ...) in the fallback font. `game/index.ts` now loads each face with a sample containing the whole Vietnamese range (U+1EA0-1EF9, Ă Â Ê Ô Ơ Ư Đ, combining marks) before the first Text is created.
+- **Other text fixes** (`game/ui/text.ts`): vertical padding scaled to the font size (stacked marks otherwise get clipped by the text canvas), extra line spacing, LINEAR filtering of text textures (oversampled text is averaged to game pixels instead of nearest-sampled, which dropped thin marks).
+- **Objective checks**: `python tools/check-vn-font-coverage.py` (fontTools: union of the family's subset files in `.next/static/media` must contain U+00C0.. Vietnamese letters, all of U+1EA0-U+1EF9, the combining marks U+0300/0301/0303/0309/0323 and the punctuation we use). Result: Plus Jakarta Sans, Space Grotesk, Dancing Script, VT323 all 0/134 missing. In the browser, a canvas `measureText` comparison against `monospace`/`serif`/`cursive` fallbacks for every U+1EA0-1EF9 glyph plus Ă Â Ê Ô Ơ Ư Đ reports no fallback glyphs for both game fonts, and `document.fonts.check()` is true.
+- Pixel fonts such as Pixelify Sans, Silkscreen and Press Start 2P still lack Vietnamese: don't use them.
 
 ## R11. Card tilt
 
@@ -100,7 +105,7 @@ Checked against the Google Fonts metadata:
   - Memories (5 hallway photos plus 1 project photo) live in `content/memories.json`, with images in `public/memories/`. These are static and not guest data.
   - Event facts and gate guidance live in DB tables so they can be edited without redeploying.
   - Gate and walking-step photos go in a public Supabase Storage bucket `gates/`.
-  - Pixel art comes from itch.io packs (licenses are recorded in `public/game/CREDITS.md`), plus one custom host sprite with 3 outfit frames.
+  - Pixel art: a handful of tiles from the Kenney CC0 packs (rpg-urban-pack, roguelike-modern-city, tiny-town), plus hand-drawn art generated by script (`tools/gen-town-art.py`, `tools/gen-host-sprite.py`) and packed into one atlas by `tools/build-atlas.py`; credits in `public/game/CREDITS.md`. Ninja Adventure was dropped.
   - Audio is a royalty-free chiptune loop and 3–4 sound effects. It's unlocked on first input, and the mute choice is stored in `localStorage`.
 
 ## R14. Link preview
