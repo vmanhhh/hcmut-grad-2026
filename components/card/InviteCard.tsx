@@ -36,7 +36,7 @@ function CopyPhone({ phone }: { phone: string }) {
   };
   return (
     <>
-      <button type="button" onClick={copy} className="block text-sm text-[#f2c75a] underline decoration-dotted underline-offset-2" aria-label={`Sao chép số ${phone}`}>
+      <button type="button" data-notilt onClick={copy} className="-m-3 ml-auto block touch-manipulation p-3 text-sm text-[#f2c75a] underline decoration-dotted underline-offset-[5px]" aria-label={`Sao chép số ${phone}`}>
         ☎ {phone}
       </button>
       {toast &&

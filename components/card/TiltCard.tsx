@@ -15,6 +15,7 @@ const clamp = (v: number) => Math.max(-MAX_DEG, Math.min(MAX_DEG, v));
  */
 export default function TiltCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  const frozen = useRef(false); // finger is on a [data-notilt] control: hold the card still so it can be tapped
   const touching = useRef(false); // finger down or mouse hovering: the pointer owns the card
   const gyroAsked = useRef(false);
   const gyroLive = useRef(false);
@@ -114,6 +115,7 @@ export default function TiltCard({ children, className = "" }: { children: React
   }, []);
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (frozen.current) return;
     touching.current = true; // mouse hover counts too, so the idle sway / gyro loop does not overwrite it
     const rect = e.currentTarget.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width; // 0..1
@@ -122,6 +124,7 @@ export default function TiltCard({ children, className = "" }: { children: React
   };
 
   const release = () => {
+    frozen.current = false;
     touching.current = false;
     base.current = null; // re-centre gyro on the current phone angle
     if (!gyroLive.current) return; // idle sway resumes by itself
@@ -135,6 +138,11 @@ export default function TiltCard({ children, className = "" }: { children: React
         className={`holo-card pixel-card ${className}`}
         style={{ touchAction: gyro ? "pan-y" : "none" }}
         onPointerDown={(e) => {
+          if ((e.target as HTMLElement).closest("[data-notilt]")) {
+            frozen.current = true; // tapping a button/link: no tilt, no idle sway / gyro movement under the finger
+            touching.current = true;
+            return;
+          }
           onMove(e);
         }}
         onPointerMove={onMove}
