@@ -142,9 +142,11 @@ export default function InviteCard({
       </TiltCard>
 
       {onReplay && event.journey_version > 0 && (
-        <button type="button" className="btn w-full" onClick={onReplay}>
-          Chơi lại hành trình
-        </button>
+        <div className="pt-10 pb-[env(safe-area-inset-bottom)]">
+          <button type="button" className="btn w-full" onClick={onReplay}>
+            Chơi lại hành trình
+          </button>
+        </div>
       )}
     </main>
     </div>

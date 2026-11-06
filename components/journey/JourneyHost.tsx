@@ -188,12 +188,12 @@ export default function JourneyHost({
   };
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Hành trình" className="fixed inset-0 z-50 flex flex-col bg-[#08080a]">
+    <div role="dialog" aria-modal="true" aria-label="Hành trình" className={`fixed inset-0 z-50 flex flex-col ${kind === "chapters" ? "bg-[#08080a]" : "bg-[#5eb04d]"}`}>
       <div
         className={
           kind === "chapters"
             ? "flex flex-wrap items-center justify-between gap-1.5 px-2 py-1.5"
-            : "pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-1.5 px-2 pt-2 [&>*]:pointer-events-auto"
+            : "pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-1.5 px-2 pt-[max(0.5rem,env(safe-area-inset-top))] [&>*]:pointer-events-auto"
         }
       >
         <button type="button" className="btn btn-compact btn-gold" onClick={() => finish("skipped")}>
@@ -228,7 +228,7 @@ export default function JourneyHost({
           <ChaptersFallback memories={memories} galleries={galleries} letter={letter} hostName={hostName} onFinish={finish} />
         </div>
       ) : (
-        <div className="relative min-h-0 flex-1">
+        <div className="relative min-h-0 flex-1 pb-[env(safe-area-inset-bottom)]">
           <div ref={stageRef} className="absolute inset-0" />
           {!loaded && (
             <div className="journey-loader pointer-events-none absolute inset-0 grid place-content-center justify-items-center gap-4" aria-live="polite">

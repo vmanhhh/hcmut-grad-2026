@@ -123,7 +123,7 @@ export function startJourney(parent: HTMLElement, input: JourneyInput, cb: Journ
       height: first.h,
       pixelArt: true,
       roundPixels: true,
-      backgroundColor: "#08080a",
+      backgroundColor: "#5eb04d",
       scale: { mode: Phaser.Scale.NONE, zoom: first.zoom, autoCenter: Phaser.Scale.CENTER_BOTH },
       input: { activePointers: 3, keyboard: false },
       scene: [Boot, Campus, Hallway, Stage, Letter],
