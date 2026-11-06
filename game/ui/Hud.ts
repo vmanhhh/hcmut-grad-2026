@@ -87,7 +87,7 @@ export default class Hud {
   openGallery(year: number) {
     if (this.external) return;
     this.external = true;
-    this.hero.padDir = null;
+    this.hero.releasePad();
     this.hero.cancelRoute();
     sfx(this.scene, "interact");
     this.layout();
@@ -102,7 +102,7 @@ export default class Hud {
     this.unsub = null;
     this.scene.scale.off("resize", this.onResize, this);
     this.scene.events.off("update", this.checkStick, this);
-    this.hero.padDir = null;
+    this.hero.releasePad();
   }
 
   /** The scene tells the HUD whether something can be interacted with right now (and what to say). */
@@ -157,7 +157,7 @@ export default class Hud {
     const lines = [
       "CÁCH CHƠI",
       "",
-      touch ? "• Kéo joystick (góc trái) để đi" : "• Phím mũi tên hoặc W A S D để đi",
+      touch ? "• Kéo joystick (dưới màn hình) để đi" : "• Phím mũi tên hoặc W A S D để đi",
       touch ? null : "• Bấm chuột vào bản đồ: tự đi tới đó",
       touch ? "• Nút E (góc phải): xem kỷ niệm" : "• E hoặc Space: xem kỷ niệm khi đứng cạnh khung ảnh",
       "",
@@ -182,7 +182,7 @@ export default class Hud {
     const catcher = this.scene.add.rectangle(0, 0, v.w * 2, v.h * 2, 0x000000, 0.35).setOrigin(0).setScrollFactor(0).setDepth(HUD_DEPTH + 9).setInteractive();
     this.guideObjs = [catcher, panel, text];
     this.external = true;
-    this.hero.padDir = null;
+    this.hero.releasePad();
     this.hero.cancelRoute();
     this.layout();
     const close = () => {
@@ -237,8 +237,9 @@ export default class Hud {
     const m = 5;
     const show = !this.external && this.controlsOn;
     if (this.stickBase && this.stickKnob) {
-      const r = Math.max(14, Math.round(34 / v.zoom)); // about 34 css px radius on any zoom
-      this.stick = { x: m + r * 1.6, y: v.h - m - r * 1.6, r };
+      // bottom centre, diameter = one third of the screen width (a thumb-sized pad on any phone)
+      const r = Math.min(Math.max(Math.round(v.w / 6), 16), 70);
+      this.stick = { x: Math.round(v.w / 2), y: v.h - m - r * 1.25, r };
       this.drawStick(show, 0, 0);
     }
     if (this.eBtn) {
@@ -258,7 +259,7 @@ export default class Hud {
     b.clear().setVisible(show);
     k.clear().setVisible(show);
     if (!show) return;
-    b.fillStyle(0x1b1a38, 0.5).fillCircle(x, y, r).lineStyle(1, 0xf2c75a, 0.9).strokeCircle(x, y, r);
+    b.fillStyle(0x1b1a38, 0.32).fillCircle(x, y, r).lineStyle(1, 0xf2c75a, 0.9).strokeCircle(x, y, r);
     k.fillStyle(0xf2c75a, 0.9).fillCircle(x + dx, y + dy, r * 0.42).lineStyle(1, 0x1b1a38, 1).strokeCircle(x + dx, y + dy, r * 0.42);
   }
 
@@ -272,8 +273,7 @@ export default class Hud {
       dy = (dy / d) * r;
     }
     this.drawStick(true, dx, dy);
-    if (d < r * 0.3) this.hero.padDir = null;
-    else this.hero.padDir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : dy < 0 ? "up" : "down";
+    this.hero.padVec = d < r * 0.3 ? null : { x: dx / r, y: dy / r }; // analog: diagonals work
   }
 
   private checkStick() {
@@ -284,7 +284,7 @@ export default class Hud {
 
   private releaseStick() {
     this.stickId = null;
-    this.hero.padDir = null;
+    this.hero.releasePad();
     this.drawStick(!this.external && this.controlsOn, 0, 0);
   }
 
@@ -296,7 +296,7 @@ export default class Hud {
   openMemory(m: Memory) {
     if (this.external) return;
     this.external = true;
-    this.hero.padDir = null;
+    this.hero.releasePad();
     this.hero.cancelRoute();
     sfx(this.scene, "interact");
     this.layout();

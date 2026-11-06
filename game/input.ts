@@ -67,6 +67,20 @@ export class Keys {
     this.order = [];
   };
 
+  /** All held direction keys combined into a vector (-1..1 per axis), so two keys walk diagonally. */
+  vec(): { x: number; y: number } {
+    let x = 0;
+    let y = 0;
+    for (const code of this.held) {
+      const d = DIR_KEYS[code];
+      if (d === "left") x -= 1;
+      else if (d === "right") x += 1;
+      else if (d === "up") y -= 1;
+      else if (d === "down") y += 1;
+    }
+    return { x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) };
+  }
+
   /** The direction currently asked for by the keyboard, or null. */
   dir(): Dir | null {
     return this.order.length ? this.order[this.order.length - 1] : null;

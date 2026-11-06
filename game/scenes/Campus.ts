@@ -114,24 +114,16 @@ export default class Campus extends Phaser.Scene {
     put(this, "gate_wall", OPEN_L - 40, GATE_Y, { origin: [1, 1], depth: GATE_Y - 1 }).setFlipX(true);
     put(this, "hcmut_gate", PILLAR_X, GATE_Y, { depth: GATE_Y });
     put(this, "flag_vn", OPEN_R + 90, GATE_Y - 4, { depth: GATE_Y - 2 });
-    // address on the right wall (wall top is 91 px above the gate line; its panel spans 12..76 px below the top).
-    // On a portrait phone only ~40 px of that wall is on screen, so the lines are short and stacked.
-    const narrow = view(this).portrait;
+    // address on the right wall, centred on the wall's panel (wall top is 91 px above the gate line; the panel spans
+    // 12..76 px below the top). Same layout on every screen: on a narrow phone it may be cropped by the screen edge,
+    // but it always sits in the same place inside the panel.
     const wallTop = GATE_Y - 91;
     const addr = { color: "#f1f5fb", stroke: null, depth: GATE_Y } as const;
-    if (narrow) {
-      const ax = OPEN_R + 22;
-      label(this, ax, wallTop + 24, "268", { ...addr, size: 22, color: "#ffffff" });
-      label(this, ax, wallTop + 43, "LÝ", { ...addr, size: 14 });
-      label(this, ax, wallTop + 57, "THƯỜNG", { ...addr, size: 14 });
-      label(this, ax, wallTop + 71, "KIỆT", { ...addr, size: 14 });
-    } else {
-      const ax = OPEN_R + 49;
-      label(this, ax, wallTop + 24, "268", { ...addr, size: 30, color: "#ffffff" });
-      label(this, ax, wallTop + 44, "LÝ THƯỜNG", { ...addr, size: 16 });
-      label(this, ax, wallTop + 59, "KIỆT", { ...addr, size: 16 });
-      label(this, ax, wallTop + 72, "Q.10 · TP.HCM", { ...addr, size: 12, color: "#b9c6d6" });
-    }
+    const ax = OPEN_R + 49;
+    label(this, ax, wallTop + 24, "268", { ...addr, size: 30, color: "#ffffff" });
+    label(this, ax, wallTop + 44, "LÝ THƯỜNG", { ...addr, size: 16 });
+    label(this, ax, wallTop + 59, "KIỆT", { ...addr, size: 16 });
+    label(this, ax, wallTop + 72, "Q.10 · TP.HCM", { ...addr, size: 12, color: "#b9c6d6" });
     // small "2022" plaque at the foot of the pillar keeps the Gate 2022 story
     put(this, "gate_plaque", PILLAR_X, GATE_Y + 12, { depth: GATE_Y + 12 });
     label(this, PILLAR_X, GATE_Y + 2, "2022", { size: 14, color: "#ffffff", stroke: null, depth: GATE_Y + 14 });
@@ -248,7 +240,9 @@ export default class Campus extends Phaser.Scene {
     const stretch = () => {
       const v = view(this);
       const bx = COLS * T < v.w ? -(v.w - COLS * T) / 2 : 0;
-      cam.setBounds(bx, -TOP_PAD, Math.max(COLS * T, v.w), ROWS * T + TOP_PAD);
+      // on a phone, also let the camera look below the map so the host starts above the joystick (grass colour fills it)
+      const bottomPad = isTouch() ? Math.round(v.h * 0.18) : 0;
+      cam.setBounds(bx, -TOP_PAD, Math.max(COLS * T, v.w), ROWS * T + TOP_PAD + bottomPad);
     };
     stretch();
     this.scale.on("resize", stretch);
@@ -279,7 +273,9 @@ export default class Campus extends Phaser.Scene {
     const k = (a: number, b: number) => Phaser.Math.Clamp((y - a) / (b - a), 0, 1);
     const gate = k(GATE_Y - 120, GATE_Y - 20);
     const hall = k(330, 210);
-    const f = 0.14 + 0.28 * gate + 0.30 * hall;
+    // on a phone the joystick fills the bottom quarter: keep the host above it instead of at the very bottom edge
+    const touch = isTouch();
+    const f = 0.14 + (touch ? 0.07 : 0.28) * gate + (touch ? 0.12 : 0.30) * hall;
     this.cameras.main.followOffset.set(v.portrait ? Math.round(18 * gate) : 0, Math.round(v.h * f));
   }
 

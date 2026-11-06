@@ -76,6 +76,13 @@ export default class Hero {
   frozen = false;
   /** Set by the D-pad buttons. */
   padDir: Dir | null = null;
+  /** Analog joystick vector (-1..1 per axis); lets the host walk diagonally. */
+  padVec: { x: number; y: number } | null = null;
+
+  releasePad() {
+    this.padDir = null;
+    this.padVec = null;
+  }
 
   constructor(private scene: Phaser.Scene, private walk: Walk, x: number, y: number, outfit: Outfit, private keys: Keys) {
     this.outfit = outfit;
@@ -172,8 +179,36 @@ export default class Hero {
   update(time: number, delta: number) {
     if (this.frozen) return;
     const dt = delta / 1000;
-    let want: Dir | null = this.keys.dir() ?? this.padDir;
-    if (want) this.route = []; // manual control wins over tap-to-walk
+    // manual control (held keys or the joystick) walks freely in 8 directions and wins over tap-to-walk
+    const kv = this.keys.vec();
+    const mv = kv.x || kv.y ? kv : this.padVec;
+    if (mv && (mv.x || mv.y)) {
+      this.route = [];
+      const len = Math.hypot(mv.x, mv.y);
+      const k = Math.min(1, len) / len;
+      const vx = mv.x * k * SPEED * dt;
+      const vy = mv.y * k * SPEED * dt;
+      this.dir = Math.abs(mv.x) > Math.abs(mv.y) ? (mv.x < 0 ? "left" : "right") : mv.y < 0 ? "up" : "down";
+      const x = this.sprite.x;
+      const y = this.sprite.y;
+      let moved = true;
+      if (this.canStand(x + vx, y + vy)) this.sprite.setPosition(x + vx, y + vy);
+      else if (vx && this.canStand(x + vx, y)) this.sprite.setPosition(x + vx, y); // slide along walls
+      else if (vy && this.canStand(x, y + vy)) this.sprite.setPosition(x, y + vy);
+      else moved = false;
+      if (moved) {
+        this.play();
+        if (time > this.stepAt) {
+          sfx(this.scene, "step", 0.2);
+          this.stepAt = time + 220;
+        }
+      } else {
+        this.idle();
+      }
+      this.sync();
+      return;
+    }
+    let want: Dir | null = null;
 
     let vx = 0;
     let vy = 0;
@@ -192,7 +227,7 @@ export default class Hero {
     }
     if (want) {
       this.dir = want;
-      const tapping = this.route.length > 0 && !this.keys.dir() && !this.padDir;
+      const tapping = this.route.length > 0;
       const d = (tapping ? TAP_SPEED : SPEED) * dt;
       if (want === "left") vx = -d;
       if (want === "right") vx = d;
