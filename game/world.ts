@@ -295,7 +295,7 @@ export class Npc {
     scene.events.on("update", this.tick, this);
     scene.events.once("shutdown", () => scene.events.off("update", this.tick, this));
     this.sprite.setDepth(this.sprite.y);
-    this.nextSay = 6000 + Math.random() * 14000;
+    this.nextSay = 1500 + Math.random() * 3500;
   }
 
   private bubble?: Phaser.GameObjects.Text;
@@ -311,7 +311,7 @@ export class Npc {
       size: 12, color: "#1a1030", stroke: null, bg: "#fff6d6", pad: [4, 2], wrap: 150, align: "center", origin: [0.5, 1],
     }).setDepth(100000);
     this.bubbleLeft = 3200;
-    this.nextSay = 12000 + Math.random() * 18000;
+    this.nextSay = 3000 + Math.random() * 4000;
   }
 
   private tick = (_t: number, dt: number) => {

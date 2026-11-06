@@ -26,6 +26,9 @@ FONT = {
     "0": ["111", "101", "101", "101", "111"], "1": ["010", "110", "010", "010", "111"],
     "2": ["111", "001", "111", "100", "111"], "7": ["111", "001", "010", "010", "010"],
     "K": ["101", "101", "110", "101", "101"],
+    "B": ["110", "101", "110", "101", "110"], "C": ["011", "100", "100", "100", "011"],
+    "O": ["111", "101", "101", "101", "111"], "N": ["101", "111", "111", "101", "101"],
+    "S": ["011", "100", "010", "001", "110"],
 }
 
 
@@ -250,6 +253,26 @@ def pillow():  # C24.07: the sleepy night
     return finish(im, 18)
 
 
+def apartment():  # C24.07: the Bcons apartment block in Binh Duong
+    im = canvas()
+    rect(im, 8, 10, 36, H - 4, BLUE[1])  # tower
+    rect(im, 8, 10, 10, H - 4, BLUE[2])
+    rect(im, 34, 10, 36, H - 4, BLUE[0])
+    rect(im, 6, 8, 38, 11, GREY[2])  # roof slab
+    rect(im, 6, 8, 38, 8, GREY[3])
+    rect(im, 12, 13, 32, 20, C("#e8782a"))  # sign band
+    rect(im, 12, 13, 32, 14, C("#f5a05a"))
+    text(im, "BCONS", 12, 15, WHITE)
+    for y in range(24, H - 8, 7):  # window grid
+        for i, x in enumerate((13, 20, 27)):
+            lit = (y // 7 + i) % 3 != 0
+            rect(im, x, y, x + 3, y + 4, YEL[2] if lit else BLUE[3])
+            rect(im, x, y + 4, x + 3, y + 4, YEL[1] if lit else BLUE[2])
+    rect(im, 18, H - 12, 26, H - 4, GREY[0])  # lobby door
+    rect(im, 19, H - 11, 25, H - 4, BLUE[3])
+    return finish(im, 18)
+
+
 # ---------------------------------------------------------------- year 4 -----
 def heart():  # last K22 trip
     im = canvas()
@@ -382,6 +405,6 @@ def door():  # D1107
 MARKERS = {
     "f1": plane, "f3": balloons, "f7": friends, "f5": lighthouse, "f4": helmet, "f6": tent,
     "f8": bike, "f10": blossom, "f9": pine, "f23": camera,
-    "f12": lamp_off, "f13": board, "f14": signposts, "f15": pillow, "f24": heart, "f25": gift,
+    "f12": lamp_off, "f13": board, "f14": signposts, "f15": apartment, "f24": heart, "f25": gift,
     "f19": cairn, "f27": lotus, "f21": suitcase, "f20": cake, "f17": cap, "f26": door,
 }

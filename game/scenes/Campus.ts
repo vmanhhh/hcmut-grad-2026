@@ -153,7 +153,6 @@ export default class Campus extends Phaser.Scene {
     // -------------------------------------------- the park (y 60..77)
     const park = [
       ["palm_c", 9.5, 75],
-      ["tree_a", 11.2, 70],
       ["palm_a", 10.4, 66.5],
       ["tree_b", 7, 67],
       ["bush_b", 11.6, 73.5],
@@ -201,18 +200,18 @@ export default class Campus extends Phaser.Scene {
       { x: 17.4 * T, y: 53 * T },
     ], 20);
     new Npc(this, "npc-3", [
-      { x: 9 * T, y: 59.2 * T },
-      { x: 11.5 * T, y: 59.2 * T },
+      { x: 13.8 * T, y: 58 * T },
+      { x: 17.2 * T, y: 58 * T },
     ], 14);
     new Npc(this, "npc-4", [
-      { x: 19.6 * T, y: 31 * T },
-      { x: 19.6 * T, y: 26 * T },
-      { x: 23.5 * T, y: 26 * T },
-      { x: 23.5 * T, y: 31 * T },
+      { x: 19.6 * T, y: 28.6 * T },
+      { x: 19.6 * T, y: 24 * T },
+      { x: 23.5 * T, y: 24 * T },
+      { x: 23.5 * T, y: 28.6 * T },
     ], 18);
     new Npc(this, "npc-2", [
-      { x: 4 * T, y: 100.8 * T },
-      { x: 8 * T, y: 100.8 * T },
+      { x: 9.5 * T, y: 100.8 * T },
+      { x: 12.5 * T, y: 100.8 * T },
     ], 12);
     new Npc(this, "npc-4", [
       { x: 14.4 * T, y: 38 * T },
