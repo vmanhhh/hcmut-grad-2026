@@ -19,6 +19,7 @@ export default function TiltCard({ children, className = "" }: { children: React
   const gyroAsked = useRef(false);
   const gyroLive = useRef(false);
   const base = useRef<{ b: number; g: number } | null>(null);
+  const gyroState = useRef({ rx: 0, ry: 0, trx: 0, try_: 0 });
   const [gyro, setGyro] = useState(false);
 
   const apply = useCallback((rx: number, ry: number, mx: number, my: number, glare: number, spring: boolean) => {
@@ -37,7 +38,13 @@ export default function TiltCard({ children, className = "" }: { children: React
     let raf = 0;
     const t0 = performance.now();
     const tick = (now: number) => {
-      if (!touching.current && !gyroLive.current) {
+      if (!touching.current && gyroLive.current) {
+        // exponential smoothing toward the sensor target: removes jitter and gives the card some weight
+        const g = gyroState.current;
+        g.rx += (g.trx - g.rx) * 0.12;
+        g.ry += (g.try_ - g.ry) * 0.12;
+        apply(g.rx, g.ry, 0.5 + g.ry / (MAX_DEG * 2), 0.5 - g.rx / (MAX_DEG * 2), 1, false);
+      } else if (!touching.current) {
         const t = (now - t0) / 1000;
         const ry = Math.sin(t * 0.9) * 7;
         const rx = Math.cos(t * 0.7) * 4;
@@ -54,13 +61,15 @@ export default function TiltCard({ children, className = "" }: { children: React
       if (e.beta == null || e.gamma == null) return;
       gyroLive.current = true;
       setGyro(true);
-      if (touching.current) return;
       if (!base.current) base.current = { b: e.beta, g: e.gamma };
-      const rx = clamp(-(e.beta - base.current.b) * 0.6);
-      const ry = clamp((e.gamma - base.current.g) * 0.6);
-      apply(rx, ry, 0.5 + ry / (MAX_DEG * 2), 0.5 - rx / (MAX_DEG * 2), 1, false);
+      // the neutral pose slowly follows how the phone is held, so any resting posture feels centred
+      base.current.b += (e.beta - base.current.b) * 0.02;
+      base.current.g += (e.gamma - base.current.g) * 0.02;
+      const g = gyroState.current;
+      g.trx = clamp(-(e.beta - base.current.b) * 0.5);
+      g.try_ = clamp((e.gamma - base.current.g) * 0.5);
     },
-    [apply],
+    [],
   );
 
   // Android / desktop: no permission needed, so listen right away (events simply never fire if no sensor).
@@ -86,6 +95,23 @@ export default function TiltCard({ children, className = "" }: { children: React
       /* fall back to drag + idle sway */
     }
   };
+
+  // The guest already taps during the journey ("bấm để bắt đầu", "Vào thiệp mời"), so ask on the first
+  // touchend/click anywhere: iOS accepts touchend/click (not touchstart) as the required user gesture.
+  useEffect(() => {
+    const once = () => {
+      void askGyro();
+      document.removeEventListener("touchend", once);
+      document.removeEventListener("click", once);
+    };
+    document.addEventListener("touchend", once, { passive: true });
+    document.addEventListener("click", once);
+    return () => {
+      document.removeEventListener("touchend", once);
+      document.removeEventListener("click", once);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
