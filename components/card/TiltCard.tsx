@@ -15,7 +15,7 @@ const clamp = (v: number) => Math.max(-MAX_DEG, Math.min(MAX_DEG, v));
  */
 export default function TiltCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const touching = useRef(false);
+  const touching = useRef(false); // finger down or mouse hovering: the pointer owns the card
   const gyroAsked = useRef(false);
   const gyroLive = useRef(false);
   const base = useRef<{ b: number; g: number } | null>(null);
@@ -114,6 +114,7 @@ export default function TiltCard({ children, className = "" }: { children: React
   }, []);
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    touching.current = true; // mouse hover counts too, so the idle sway / gyro loop does not overwrite it
     const rect = e.currentTarget.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width; // 0..1
     const py = (e.clientY - rect.top) / rect.height;
@@ -134,12 +135,11 @@ export default function TiltCard({ children, className = "" }: { children: React
         className={`holo-card pixel-card ${className}`}
         style={{ touchAction: gyro ? "pan-y" : "none" }}
         onPointerDown={(e) => {
-          touching.current = true;
           onMove(e);
         }}
         onPointerMove={onMove}
         onPointerLeave={release}
-        onPointerUp={release}
+        onPointerUp={(e) => e.pointerType !== "mouse" && release()} // a mouse stays hovering after the click
         onPointerCancel={release}
         onClick={() => void askGyro()} // click/touchend is a gesture iOS accepts for the permission prompt
       >

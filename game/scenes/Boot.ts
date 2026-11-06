@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { ctx, view } from "../context";
+import { ctx } from "../context";
 import { makeWalkAnims } from "../world";
 
 const SHEETS = ["host-freshman", "host-student", "host-graduate", "npc-1", "npc-2", "npc-3", "npc-4"];
@@ -14,13 +14,7 @@ export default class Boot extends Phaser.Scene {
   }
 
   preload() {
-    const v = view(this);
-    const barBg = this.add.rectangle(v.w / 2, v.h / 2, 120, 6, 0x222244);
-    const bar = this.add.rectangle(v.w / 2 - 60, v.h / 2, 0, 6, 0xf2c75a).setOrigin(0, 0.5);
-    this.load.on("progress", (p: number) => {
-      bar.width = 120 * p;
-    });
-    this.events.once("shutdown", () => barBg.destroy());
+    // No canvas progress bar: the HTML loader in JourneyHost stays up until the first zone report.
 
     let failed = false;
     this.load.on("loaderror", (file: Phaser.Loader.File) => {

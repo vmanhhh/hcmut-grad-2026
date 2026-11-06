@@ -28,7 +28,8 @@ function cssFont(parent: HTMLElement, variable: string, fallback: string): strin
 export function computeView(cw: number, ch: number): { zoom: number; w: number; h: number } {
   const portrait = ch > cw * 1.1;
   const targetW = portrait ? 280 : 420;
-  let zoom = Math.max(1, Math.round(cw / targetW));
+  // capped at 4: on big desktop monitors a higher zoom makes everything (text, pillar) look oversized
+  let zoom = Math.min(4, Math.max(1, Math.round(cw / targetW)));
   while (zoom > 1 && ch / zoom < 180) zoom--;
   return { zoom, w: Math.max(160, Math.floor(cw / zoom)), h: Math.max(160, Math.floor(ch / zoom)) };
 }

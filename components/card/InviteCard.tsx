@@ -1,10 +1,54 @@
 "use client";
 
 import { windowLabel } from "@/lib/calendar";
-import { telLink } from "@/lib/links";
 import type { InvitePayload, SavedRsvp } from "@/lib/types";
 import type { InAppInfo } from "@/lib/user-agent";
+import { useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import TiltCard from "./TiltCard";
+
+/** Tapping the phone number copies it (clipboard API, with a textarea fallback for older/in-app browsers) and shows a toast. */
+function CopyPhone({ phone }: { phone: string }) {
+  const [toast, setToast] = useState<string | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copy = async () => {
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(phone);
+      ok = true;
+    } catch {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = phone;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        ok = document.execCommand("copy");
+        ta.remove();
+      } catch {
+        ok = false;
+      }
+    }
+    setToast(ok ? "Đã sao chép số điện thoại" : "Không sao chép được, hãy giữ số để chép");
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setToast(null), 2000);
+  };
+  return (
+    <>
+      <button type="button" onClick={copy} className="block text-sm text-[#f2c75a] underline decoration-dotted underline-offset-2" aria-label={`Sao chép số ${phone}`}>
+        ☎ {phone}
+      </button>
+      {toast &&
+        createPortal( // portal: the card is 3D-transformed, which would break position: fixed inside it
+        <span role="status" className="pointer-events-none fixed inset-x-0 bottom-6 z-50 mx-auto w-fit max-w-[90vw] rounded bg-[#1b1a38] px-4 py-2 text-sm text-[#fff3c4] shadow-lg ring-1 ring-[#f2c75a]">
+          {toast}
+        </span>,
+        document.body,
+      )}
+    </>
+  );
+}
 
 const MAP_URL = "https://maps.app.goo.gl/ApwZgs3nozznnVpRA";
 /** Place name exactly as Google Maps shows it for MAP_URL. */
@@ -90,9 +134,7 @@ export default function InviteCard({
           </span>
           <span className="text-right">
             {event.contact_phone && (
-              <a href={telLink(event.contact_phone)} className="block text-sm text-[#f2c75a] underline decoration-dotted underline-offset-2" aria-label={`Gọi ${event.contact_phone}`}>
-                ☎ {event.contact_phone}
-              </a>
+              <CopyPhone phone={event.contact_phone} />
             )}
             <span className="text-[0.62rem] uppercase tracking-wider">Chạm &amp; nghiêng thẻ</span>
           </span>

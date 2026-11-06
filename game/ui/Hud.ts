@@ -174,7 +174,9 @@ export default class Hud {
       "",
       touch ? "[ Chạm để bắt đầu ]" : "[ Bấm E / Space / chuột để bắt đầu ]",
     ].filter((l): l is string => l !== null);
-    const wrap = Math.min(v.w - 40, 280);
+    // keep the card a sensible on-screen size: smaller type and a narrower column at high zoom (big desktop)
+    const big = v.zoom >= 3 && !touch;
+    const wrap = Math.min(v.w - 40, big ? 230 : 280);
     const text = label(this.scene, v.w / 2, v.h / 2, lines.join("\n"), {
       size: 14,
       color: "#fff3c4",
