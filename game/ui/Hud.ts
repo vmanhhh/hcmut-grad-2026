@@ -44,6 +44,7 @@ export default class Hud {
       scene.input.on("pointerdown", (p: Phaser.Input.Pointer) => {
         if (this.external || this.stickId !== null || Math.hypot(p.x - this.stick.x, p.y - this.stick.y) > this.stick.r * 1.7) return;
         this.stickId = p.id;
+        scene.game.registry.set("stickPointer", p.id);
         this.moveStick(p);
       });
       scene.input.on("pointermove", (p: Phaser.Input.Pointer) => {
@@ -57,6 +58,14 @@ export default class Hud {
       scene.input.on("gameout", () => this.releaseStick());
       // safety net: a finger lifted off-canvas must never leave the stick (and the host) running
       scene.events.on("update", this.checkStick, this);
+      // a finger still on the joystick when the scene changed (walking through a door) keeps steering in the new scene
+      const held = scene.game.registry.get("stickPointer") as number | undefined;
+      const p = held === undefined ? undefined : scene.input.manager.pointers.find((q) => q.id === held && q.isDown);
+      if (p) {
+        this.stickId = p.id;
+        this.layout();
+        this.moveStick(p);
+      }
     }
 
     // mouse clicks: walk toward the clicked point along the path
@@ -284,6 +293,7 @@ export default class Hud {
 
   private releaseStick() {
     this.stickId = null;
+    this.scene.game.registry.set("stickPointer", undefined);
     this.hero.releasePad();
     this.drawStick(!this.external && this.controlsOn, 0, 0);
   }

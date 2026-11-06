@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import { T, sfx, view } from "./context";
 import type { Dir, Keys } from "./input";
+import { label } from "./ui/text";
+import { randomMeme } from "./memes";
 
 export type Pt = { x: number; y: number };
 export type Rect = { x0: number; y0: number; x1: number; y1: number };
@@ -293,10 +295,34 @@ export class Npc {
     scene.events.on("update", this.tick, this);
     scene.events.once("shutdown", () => scene.events.off("update", this.tick, this));
     this.sprite.setDepth(this.sprite.y);
+    this.nextSay = 6000 + Math.random() * 14000;
+  }
+
+  private bubble?: Phaser.GameObjects.Text;
+  private bubbleLeft = 0;
+  private nextSay = 0;
+  private last?: string;
+
+  private say() {
+    const text = randomMeme(this.last);
+    this.last = text;
+    this.bubble?.destroy();
+    this.bubble = label(this.scene, this.sprite.x, this.sprite.y - 30, text, {
+      size: 12, color: "#1a1030", stroke: null, bg: "#fff6d6", pad: [4, 2], wrap: 150, align: "center", origin: [0.5, 1],
+    }).setDepth(100000);
+    this.bubbleLeft = 3200;
+    this.nextSay = 12000 + Math.random() * 18000;
   }
 
   private tick = (_t: number, dt: number) => {
     if (!this.sprite.active) return;
+    if (this.bubble) {
+      this.bubbleLeft -= dt;
+      this.bubble.setPosition(Math.round(this.sprite.x), Math.round(this.sprite.y - 30));
+      if (this.bubbleLeft <= 0) { this.bubble.destroy(); this.bubble = undefined; }
+    } else if ((this.nextSay -= dt) <= 0) {
+      this.say();
+    }
     if (this.wait > 0) {
       this.wait -= dt;
       this.sprite.anims.stop();

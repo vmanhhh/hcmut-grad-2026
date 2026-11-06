@@ -112,6 +112,13 @@ def bk_hexagon(r=23):
                 if bit == "1":
                     px(im, x + c, cy + 7 + rr_, BK[3])
         x += len(FONT3[ch][0]) + 1
+    # close the see-through notches between the rhombi: fill every gap inside each row's opaque span
+    for y in range(H):
+        xs = [x for x in range(W) if im.getpixel((x, y))[3] > 0]
+        if len(xs) > 1:
+            for x in range(xs[0], xs[-1] + 1):
+                if im.getpixel((x, y))[3] == 0:
+                    px(im, x, y, BK[0])
     return outline(pad(im, 1, 1, 1, 1))
 
 
@@ -186,12 +193,12 @@ def gate_pillar():
     # ---- mount for the logo (grey-blue steel) and the hexagon
     # slim the body to the v3 proportions (nearest-neighbour squeeze keeps the pixel look), then add the logo
     from PIL import Image
-    NW = 62
+    NW = 46  # v3 body: slimmer than the logo block
     im = im.resize((NW, H), Image.NEAREST)
     hx = bk_hexagon(24)
     big = new(max(NW, hx.width), H)
     paste(big, im, (big.width - NW) // 2, 0)
-    paste(big, hx, (big.width - hx.width) // 2, top - hx.height + 8)
+    paste(big, hx, (big.width - hx.width) // 2, top - hx.height + 16)
     return outline(pad(big, 1, 1, 1, 0))
 
 

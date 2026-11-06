@@ -231,9 +231,13 @@ export default function JourneyHost({
         <div className="relative min-h-0 flex-1">
           <div ref={stageRef} className="absolute inset-0" />
           {!loaded && (
-            <p className="pointer-events-none absolute inset-0 grid place-items-center text-zinc-400" aria-live="polite">
-              Đang tải hành trình…
-            </p>
+            <div className="journey-loader pointer-events-none absolute inset-0 grid place-content-center justify-items-center gap-4" aria-live="polite">
+              <div className="journey-loader-dots" aria-hidden="true">
+                <i /> <i /> <i /> <i />
+              </div>
+              <p className="journey-loader-text">Đang tải hành trình…</p>
+              <div className="journey-loader-bar" aria-hidden="true" />
+            </div>
           )}
           {featured && !openYear && !openMemory && <FeaturedCaption preview={featured} />}
         </div>

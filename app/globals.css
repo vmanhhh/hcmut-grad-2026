@@ -16,7 +16,8 @@
 }
 
 html {
-  background: var(--color-brand-dark);
+  /* grass green so iOS Safari's status-bar / toolbar / overscroll areas match the card page instead of showing black */
+  background: #5eb04d;
   color-scheme: dark;
 }
 
@@ -295,4 +296,53 @@ a:focus-visible {
     animation: none !important;
     transform: none !important;
   }
+}
+
+/* Journey loading screen: shown on the black overlay from the first paint */
+.journey-loader-dots {
+  display: flex;
+  gap: 8px;
+}
+.journey-loader-dots i {
+  width: 12px;
+  height: 12px;
+  background: #f2c75a;
+  box-shadow: 3px 3px 0 #b02f36;
+  animation: journey-hop 0.9s steps(6, end) infinite;
+}
+.journey-loader-dots i:nth-child(2) { animation-delay: 0.12s; }
+.journey-loader-dots i:nth-child(3) { animation-delay: 0.24s; }
+.journey-loader-dots i:nth-child(4) { animation-delay: 0.36s; }
+@keyframes journey-hop {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-14px); }
+}
+.journey-loader-text {
+  font-family: var(--font-pixel);
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
+  color: #e9e4ff;
+  animation: journey-blink 1.4s steps(2, end) infinite;
+}
+@keyframes journey-blink {
+  50% { opacity: 0.45; }
+}
+.journey-loader-bar {
+  width: 140px;
+  height: 6px;
+  background: #222244;
+  overflow: hidden;
+  position: relative;
+}
+.journey-loader-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: #f2c75a;
+  animation: journey-slide 1.2s steps(10, end) infinite;
+}
+@keyframes journey-slide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(350%); }
 }

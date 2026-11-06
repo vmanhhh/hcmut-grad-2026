@@ -25,7 +25,9 @@ export default function InviteExperience({ payload }: { payload: InvitePayload }
       : null,
   );
   const [inApp, setInApp] = useState<InAppInfo>(NOT_IN_APP);
-  const [run, setRun] = useState<Run>(null);
+  // First visit with a journey: start in "play" from the very first (server-rendered) paint so the black
+  // loading overlay shows immediately and the card never flashes before the game.
+  const [run, setRun] = useState<Run>(visit === "first" && hasJourney ? "play" : null);
   const [promptOpen, setPromptOpen] = useState(visit === "return_new_journey" && hasJourney);
   const opened = useRef(false);
   const runRef = useRef<Run>(null);
@@ -45,18 +47,20 @@ export default function InviteExperience({ payload }: { payload: InvitePayload }
 
   useEffect(() => {
     if (visit !== "first") return;
-    if (hasJourney) setRun("play"); // overlay on top of the already-rendered card (Principle I)
-    else recordOpen(); // Release A: the card is the first thing shown (FR-012)
+    if (!hasJourney) recordOpen(); // no journey: the card is the first thing shown (FR-012)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onJourneyFinish = useCallback(() => {
-    // Completed or skipped: either way the guest reached the card (FR-012, FR-014).
-    // Replay never touches opened_at: recordOpen is idempotent and only called for play runs.
-    if (runRef.current === "play") recordOpen();
-    setRun(null);
-    window.scrollTo(0, 0);
-  }, [recordOpen]);
+  const onJourneyFinish = useCallback(
+    (reason: "completed" | "skipped") => {
+      // Only finishing the game counts as done (opened_at set), so the next visit does not replay it.
+      // A skip / load failure leaves it unrecorded. Replay never touches opened_at.
+      if (runRef.current === "play" && reason === "completed") recordOpen();
+      setRun(null);
+      window.scrollTo(0, 0);
+    },
+    [recordOpen],
+  );
 
   return (
     <>
