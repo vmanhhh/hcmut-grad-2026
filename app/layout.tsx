@@ -14,7 +14,12 @@ const DESCRIPTION = "Thiệp mời riêng tới lễ tốt nghiệp của Trần
 
 // Generic metadata only: no guest fields anywhere in <head> (FR-025, Principle II).
 export const metadata: Metadata = {
-  metadataBase: new URL("https://manh-totnghiep.vercel.app"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "https://manh-tran-grad.vercel.app"),
+  ),
   title: TITLE,
   description: DESCRIPTION,
   robots: { index: false, follow: false },
