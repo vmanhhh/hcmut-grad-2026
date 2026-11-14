@@ -132,6 +132,11 @@ export async function renderInviteCardImage({ name, degree }: { name: string; de
         </div>
       </div>
     ),
-    { ...OG_SIZE, fonts: [{ name: "Plus Jakarta Sans", data: font, weight: 700, style: "normal" }] },
+    {
+      ...OG_SIZE,
+      fonts: [{ name: "Plus Jakarta Sans", data: font, weight: 700, style: "normal" }],
+      // Cache at the CDN so Messenger's short-timeout crawler gets the image instantly after the first render.
+      headers: { "Cache-Control": "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800" },
+    },
   );
 }
