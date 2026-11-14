@@ -171,7 +171,8 @@ The host creates and edits guests (display name, role, message title/body) and v
 - **FR-009a**: A Yes or Maybe answer MUST include exactly one meeting window: 13:30–15:00 or 17:30–18:30. The host can see each guest's chosen window.
 - **FR-009b**: RSVP MUST include an optional party size (1–5).
 - **FR-009c**: The guest's role MUST only select the default salutation and message template.
-- **FR-025**: Shared-link previews (Zalo, Messenger, etc.) MUST be generic and never include the guest's name or message.
+- **FR-025**: Shared-link previews (Zalo, Messenger, etc.) for a personal link MAY show the guest's `display_name` (title and image), because personal links are sent one by one. They MUST NOT include the message, role, RSVP or any other guest field. An unknown code falls back to the generic preview.
+- **FR-026**: A group link `/g/{slug}` (a cohort, walk-in guests) MUST let a visitor enter a name and an optional note, create a personal guest row with its own invite code, and send them to `/i/{code}`. The note is stored in `guests.note` for the host only and never sent back to a browser. Reopening the group link in the same browser goes to the same personal link. Its preview names only the group label.
 - **FR-026**: Audio MUST stay off until the guest's first interaction, and the mute choice MUST be remembered.
 
 **Calendar & directions**
@@ -203,7 +204,7 @@ The host creates and edits guests (display name, role, message title/body) and v
 - **FR-020**: Event date/time, meeting point (name + map pin) and walking guidance MUST be configurable without redeploying. Current values: Saturday 28/11/2026, windows 13:30–15:00 and 17:30–18:30; meeting point at the Computer Science faculty building (exact pin to be provided by the host).
 - **FR-021**: Gate guidance MUST reflect real logistics: all three gates are open; Cổng 1 far (easy landmark / Grab drop-off, longer walk); Cổng 2 near (shortest walk); Cổng 3 near with parking that fills fast and a weekend fee of about 3.000đ (the event is on a Saturday, so the fee applies).
 - **FR-022**: Because guests do not know the meeting building, the card MUST provide step-by-step walking guidance from each gate to the meeting point (photos and text supplied by the host).
-- **FR-023**: The card MUST clearly show both meeting windows and state that the host is unavailable 15:00–17:30 because of the ceremony.
+- **FR-023**: The card MUST clearly show both meeting windows and not show any note about the ceremony gap.
 - **FR-024**: The card MUST show the host as "Trần Văn Mạnh — Bachelor of Engineering in Computer Science, HCMUT", with contact 0981907003 offered as both a tap-to-call action and a Zalo chat action.
 
 ### Key Entities

@@ -57,13 +57,25 @@ const MAP_NAME = "Khoa Khoa học và Kỹ thuật Máy tính";
 export default function InviteCard({
   payload,
   saved,
+  onJoin,
+  onUndo,
+  joining,
+  joinError,
+  onLetter,
   topSlot,
   onReplay,
 }: {
   payload: InvitePayload;
   saved: SavedRsvp | null;
-  /** Kept for the host component; the card itself no longer shows RSVP / calendar / directions. */
   onSaved?: (rsvp: SavedRsvp) => void;
+  /** Saves the guest's "yes". */
+  onJoin: () => void;
+  /** Undoes the "yes". */
+  onUndo?: () => void;
+  joining?: boolean;
+  joinError?: string | null;
+  /** Re-open the personal letter. */
+  onLetter?: () => void;
   inApp?: InAppInfo;
   /** Named slot above the card (e.g. the one-time new-journey prompt). */
   topSlot?: React.ReactNode;
@@ -108,6 +120,49 @@ export default function InviteCard({
                   ))}
                 </ul>
               </dd>
+              <dd className="mt-3">
+                {saved?.rsvp === "yes" ? (
+                  <>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-bold text-[#f2c75a]" role="status">
+                        ✓ Đã xác nhận tham gia
+                      </p>
+                      {onUndo && (
+                        <button
+                          type="button"
+                          data-notilt
+                          className="-my-2 -mr-2 inline-flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center text-[#d9d4ff] hover:text-[#fff3c4] disabled:opacity-60"
+                          disabled={joining}
+                          onClick={onUndo}
+                          aria-label="Hoàn tác"
+                          title="Hoàn tác"
+                        >
+                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M9 14 4 9l5-5" />
+                            <path d="M4 9h10a6 6 0 0 1 0 12h-3" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    {joinError && (
+                      <p role="alert" className="mt-1 text-xs text-red-300">
+                        {joinError}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <button type="button" data-notilt className="pixel-btn btn-blink" disabled={joining} onClick={onJoin}>
+                      {joining ? "Đang lưu…" : "Xác nhận tham gia"}
+                    </button>
+                    {joinError && (
+                      <p role="alert" className="mt-1 text-xs text-red-300">
+                        {joinError}
+                      </p>
+                    )}
+                  </>
+                )}
+              </dd>
             </div>
             <div>
             <a
@@ -141,13 +196,18 @@ export default function InviteCard({
         </footer>
       </TiltCard>
 
-      {onReplay && event.journey_version > 0 && (
-        <div className="pt-10 pb-[env(safe-area-inset-bottom)]">
-          <button type="button" className="btn w-full" onClick={onReplay}>
+      <div className="flex gap-2 pt-4 pb-[env(safe-area-inset-bottom)] [&>*]:flex-1">
+        {onLetter && (
+          <button type="button" className="btn" onClick={onLetter}>
+            Xem lại thư
+          </button>
+        )}
+        {onReplay && event.journey_version > 0 && (
+          <button type="button" className="btn" onClick={onReplay}>
             Chơi lại hành trình
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </main>
     </div>
   );

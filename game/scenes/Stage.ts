@@ -7,23 +7,21 @@ import { label } from "../ui/text";
 import Hero, { Walk, bakeGround, followCamera, rng } from "../world";
 
 const COLS = 24;
-const ROWS = 64;
+const ROWS = 31; // the hall is short on purpose: a few rows of chairs, then the stage
 const CX = (COLS * T) / 2;
-const START_Y = 61 * T;
-const DOORS_BASE = 45 * T; // base line of the big double doors
-const TRIGGER_Y = DOORS_BASE + 14;
-const WALL_TOP = 41; // wall band rows 41..44 (the hall's south wall)
+const START_Y = 25.5 * T; // just inside the entrance doors
+const DOORS_BASE = 31 * T; // base line of the big double doors
+const WALL_TOP = 27; // wall band rows 27..30 (the hall's entrance wall)
 
 /**
- * Zone "stage": the lobby in front of the big doors. Reaching the doors starts the cutscene (zone
- * "diploma"): the doors open, the host puts on the graduation gown, walks the red-carpet aisle to the
- * podium and receives the red diploma folder. Skippable from the host's Skip button.
+ * Zone "stage": the guest steps through the building door straight into the hall. No walking is needed:
+ * the cutscene (zone "diploma") starts by itself, the host puts on the graduation gown, walks the
+ * red-carpet aisle to the podium and receives the red diploma folder. Skippable from the host's Skip button.
  */
 export default class Stage extends Phaser.Scene {
   private hero!: Hero;
   private hud!: Hud;
   private doors!: Phaser.GameObjects.Image;
-  private fog!: Phaser.GameObjects.Rectangle;
   private cutscene = false;
   private going = false;
   private overlay: Phaser.GameObjects.GameObject[] = [];
@@ -44,29 +42,16 @@ export default class Stage extends Phaser.Scene {
 
     // ------------------------------------------------------------ floor
     const g = new Grid(COLS, ROWS, null);
-    g.rect(5, 45, 18, ROWS - 1, "c"); // lobby
-    g.rect(5, 6, 18, 40, "w"); // hall
+    g.rect(5, 6, 18, 26, "w"); // hall
     g.rect(5, 6, 18, 9, "s"); // stage
     const names = g.names();
     const over: (string | null)[][] = Array.from({ length: ROWS }, () => Array<string | null>(COLS).fill(null));
     for (let y = 0; y < ROWS; y++) {
-      if (y >= 0 && y <= 40 && y >= 0) {
-        names[y][4] = "wallv_l";
-        names[y][19] = "wallv_r";
-      }
-      if (y >= 41) {
-        names[y][4] = "wallv_l";
-        names[y][19] = "wallv_r";
-      }
+      names[y][4] = "wallv_l";
+      names[y][19] = "wallv_r";
     }
-    // red carpet aisle (hall + lobby) and a runner leading to the doors
-    for (let y = 11; y <= 40; y++) {
-      names[y][10] = "carpet_l";
-      names[y][11] = "carpet_c";
-      names[y][12] = "carpet_c";
-      names[y][13] = "carpet_r";
-    }
-    for (let y = 45; y < ROWS; y++) {
+    // red carpet aisle from the entrance to the stage
+    for (let y = 11; y <= 26; y++) {
       names[y][10] = "carpet_l";
       names[y][11] = "carpet_c";
       names[y][12] = "carpet_c";
@@ -87,11 +72,7 @@ export default class Stage extends Phaser.Scene {
       names[WALL_TOP + 2][x] = "wall_up";
       names[WALL_TOP + 3][x] = "wall_low";
     }
-    for (let y = 6; y <= 40; y++) {
-      over[y][5] = "shade_l";
-      over[y][18] = "shade_r";
-    }
-    for (let y = 45; y < ROWS; y++) {
+    for (let y = 6; y <= 26; y++) {
       over[y][5] = "shade_l";
       over[y][18] = "shade_r";
     }
@@ -113,7 +94,7 @@ export default class Stage extends Phaser.Scene {
 
     // chairs: audience seen from behind, with a few heads peeking over
     const npcKeys = ["npc-1", "npc-2", "npc-3", "npc-4"];
-    for (let row = 0; row < 8; row++) {
+    for (let row = 0; row < 4; row++) {
       const y = (14.5 + row * 3) * T;
       for (const x0 of [6, 14]) {
         for (let i = 0; i < 4; i++) {
@@ -128,38 +109,19 @@ export default class Stage extends Phaser.Scene {
       }
     }
 
-    // ------------------------------------------------------------ lobby
-    this.doors = put(this, "doors_closed", CX, DOORS_BASE, { depth: DOORS_BASE });
-    label(this, CX, DOORS_BASE - 80, "HỘI TRƯỜNG", { size: 16, color: "#ffe9a8", stroke: "#14306e", depth: DOORS_BASE + 2 });
-    for (const [x, k] of [
-      [6.2, "pot_plant"],
-      [17.8, "pot_plant"],
-      [8.6, "easel"],
-      [15.4, "easel"],
-    ] as [number, string][]) {
-      put(this, k, x * T, 48.6 * T);
-    }
-    put(this, "banner_blue", 7.4 * T, 41 * T + 2, { origin: [0.5, 0], depth: DOORS_BASE });
-    put(this, "banner_red", 16.6 * T, 41 * T + 2, { origin: [0.5, 0], depth: DOORS_BASE });
-    put(this, "picture_2", 6.4 * T, 42 * T + 18, { depth: DOORS_BASE });
-    put(this, "picture_0", 17.6 * T, 42 * T + 18, { depth: DOORS_BASE });
-    for (const y of [52, 57]) {
-      put(this, "sconce", 5.4 * T, y * T, { depth: y * T });
-      put(this, "sconce", 18.6 * T, y * T, { depth: y * T });
-      put(this, "lamp_glow", 6 * T, y * T - 8, { depth: -500, alpha: 0.5 }).setBlendMode(Phaser.BlendModes.ADD).setOrigin(0.5, 0.5);
-      put(this, "lamp_glow", 18 * T, y * T - 8, { depth: -500, alpha: 0.5 }).setBlendMode(Phaser.BlendModes.ADD).setOrigin(0.5, 0.5);
-    }
-
-    // darkness over the hall until the doors open
-    this.fog = this.add.rectangle(0, 0, COLS * T + 400, WALL_TOP * T, 0x05060f, 1).setOrigin(0).setDepth(2900);
-    this.fog.x = -200;
+    // ------------------------------------------------------------ entrance
+    this.doors = put(this, "doors_open", CX, DOORS_BASE, { depth: 5 });
+    put(this, "banner_blue", 7.4 * T, WALL_TOP * T + 2, { origin: [0.5, 0], depth: DOORS_BASE });
+    put(this, "banner_red", 16.6 * T, WALL_TOP * T + 2, { origin: [0.5, 0], depth: DOORS_BASE });
+    put(this, "picture_2", 6.4 * T, (WALL_TOP + 1) * T + 18, { depth: DOORS_BASE });
+    put(this, "picture_0", 17.6 * T, (WALL_TOP + 1) * T + 18, { depth: DOORS_BASE });
 
     // ------------------------------------------------------------ host
     const walk = new Walk(
-      [{ x0: CX - 36, y0: TRIGGER_Y - 8, x1: CX + 36, y1: START_Y + 20 }],
+      [{ x0: CX - 36, y0: 10 * T, x1: CX + 36, y1: START_Y + 20 }],
       [
         { x: CX, y: START_Y },
-        { x: CX, y: TRIGGER_Y },
+        { x: CX, y: 10 * T },
       ],
     );
     this.hero = new Hero(this, walk, CX, START_Y, "student", keys);
@@ -170,15 +132,18 @@ export default class Stage extends Phaser.Scene {
     c.startMusic("grad");
     c.zone("stage");
 
+    // no walking needed: the ceremony starts by itself a moment after the door closes behind the host
+    this.hud.setControlsVisible(false);
+    this.time.delayedCall(700, () => this.playCutscene());
+
     this.game.registry.set("skipCutscene", () => this.skip());
     this.events.once("shutdown", () => this.game.registry.set("skipCutscene", null));
   }
 
   update(time: number, delta: number) {
     if (this.cutscene || this.going) return;
-    this.hero.frozen = this.hud.modalOpen;
+    this.hero.frozen = true;
     this.hero.update(time, delta);
-    if (this.hero.y <= TRIGGER_Y + 2 && !this.hud.modalOpen) this.playCutscene();
   }
 
   private sparkles(x: number, y: number, n = 24) {
@@ -207,12 +172,6 @@ export default class Stage extends Phaser.Scene {
     sfx(this, "interact");
     c.zone("diploma");
 
-    // doors swing open and light floods the hall
-    this.doors.setTexture("atlas", "doors_open").setDepth(5);
-    this.tweens.add({ targets: this.fog, alpha: 0, duration: 1400 });
-    await this.wait(700);
-    if (this.going) return;
-
     // outfit change: student -> graduate (gown + cap), with a sparkle
     this.hero.face("up");
     this.sparkles(this.hero.x, this.hero.y - 12);
@@ -224,7 +183,6 @@ export default class Stage extends Phaser.Scene {
     // walk the red carpet to the podium
     await this.hero.autoWalk(
       [
-        { x: CX, y: DOORS_BASE - 8 },
         { x: CX, y: 9.6 * T }, // straight up the aisle and the steps to the podium
       ],
       72,
@@ -312,7 +270,7 @@ export default class Stage extends Phaser.Scene {
     }
     const hands = this.add.particles(0, 0, "clap", {
       x: { min: 6 * T, max: 18 * T },
-      y: { min: 13 * T, max: 34 * T },
+      y: { min: 13 * T, max: 25 * T },
       speedY: { min: -26, max: -12 },
       lifespan: 700,
       frequency: 70,

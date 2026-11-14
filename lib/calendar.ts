@@ -12,6 +12,11 @@ type CalEvent = Pick<
   "meeting_point_name" | "address" | "meeting_note" | "contact_phone" | "public_base_url" | "meeting_lat" | "meeting_lng"
 >;
 
+/** The only meeting window now: 09:00-12:00 on the day (overrides whatever the DB still holds). */
+export const MEETING_WINDOWS: MeetingWindow[] = [
+  { id: "early", starts_at: "2026-11-28T09:00:00+07:00", ends_at: "2026-11-28T12:00:00+07:00" },
+];
+
 /** Query param > saved window > both. Unknown ids are ignored. */
 export function selectWindows(
   windows: MeetingWindow[],

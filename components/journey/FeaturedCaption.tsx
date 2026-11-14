@@ -14,6 +14,8 @@ export default function FeaturedCaption({ preview }: { preview: FeaturedPreview 
   const current = photos[idx % Math.max(1, photos.length)];
   const isVideo = !!current?.video;
 
+  const next = () => setIdx((i) => (i + 1) % Math.max(1, photos.length));
+
   useEffect(() => {
     setIdx(0);
   }, [preview.title]);
@@ -40,7 +42,9 @@ export default function FeaturedCaption({ preview }: { preview: FeaturedPreview 
                 poster={current.src || undefined}
                 autoPlay
                 muted
-                loop
+                loop={photos.length < 2}
+                onEnded={next}
+                onError={next}
                 playsInline
                 className="max-h-[26vh] w-auto max-w-full object-contain sm:max-h-[30vh]"
               />
@@ -66,6 +70,9 @@ export default function FeaturedCaption({ preview }: { preview: FeaturedPreview 
           )}
         </div>
         <figcaption className="px-3 py-2 text-center">
+          {preview.when && (
+            <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-[#f2c75a]/90 sm:text-xs">🗓 {preview.when}</p>
+          )}
           <p className="font-display text-base font-bold leading-snug text-brand-gold sm:text-lg">{preview.title}</p>
           <p className="mt-0.5 whitespace-pre-line text-xs leading-snug text-zinc-100 sm:text-sm">{preview.caption}</p>
         </figcaption>

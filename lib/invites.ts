@@ -1,7 +1,9 @@
 import "server-only";
+import { cache } from "react";
 import { z } from "zod";
 import { canUsePgFallback, pgServer } from "./pg-server";
 import { supabaseServer } from "./supabase-server";
+import { MEETING_WINDOWS } from "./calendar";
 import { salutationFor, type Role } from "./salutation";
 import type { EventPublic, Gate, InvitePayload, SavedRsvp, Visit } from "./types";
 
@@ -69,6 +71,9 @@ export async function getInvite(code: string): Promise<InviteRecord | null> {
   };
 }
 
+/** Same lookup, deduplicated within one request (page + generateMetadata + opengraph-image). */
+export const getInviteCached = cache(getInvite);
+
 /** See the visit table in contracts/http-api.md. */
 export function decideVisit(
   openedAt: string | null,
@@ -92,7 +97,7 @@ export function toPayload(code: string, rec: InviteRecord): InvitePayload {
       message_title: guest.message_title,
       message_body: guest.message_body,
       rsvp: guest.rsvp,
-      meeting_window: guest.meeting_window,
+      meeting_window: guest.meeting_window ? "early" : null,
       party_size: guest.party_size,
       wish: guest.wish,
     },
@@ -107,7 +112,7 @@ export function toPayload(code: string, rec: InviteRecord): InvitePayload {
       meeting_lat: event.meeting_lat,
       meeting_lng: event.meeting_lng,
       meeting_note: event.meeting_note,
-      windows: event.windows,
+      windows: MEETING_WINDOWS,
       busy_note: event.busy_note,
       public_base_url: event.public_base_url,
       journey_version: event.journey_version,
@@ -205,4 +210,23 @@ export async function saveRsvp(code: string, input: RsvpInput): Promise<SavedRsv
     .select("invite_code");
   if (error) throw new Error("rsvp failed");
   return (data?.length ?? 0) > 0 ? saved : null;
+}
+
+/** Undo: back to "no answer yet" (the DB constraints require rsvp, window, party size and wish to be cleared together). */
+export async function clearRsvp(code: string): Promise<boolean> {
+  if (!isValidCode(code)) return false;
+  if (canUsePgFallback()) {
+    const rows = await pgServer()<{ invite_code: string }[]>`
+      update guests set rsvp = null, meeting_window = null, party_size = null, wish = null, rsvp_at = null
+      where invite_code = ${code}
+      returning invite_code`;
+    return rows.length > 0;
+  }
+  const { data, error } = await supabaseServer()
+    .from("guests")
+    .update({ rsvp: null, meeting_window: null, party_size: null, wish: null, rsvp_at: null })
+    .eq("invite_code", code)
+    .select("invite_code");
+  if (error) throw new Error("rsvp undo failed");
+  return (data?.length ?? 0) > 0;
 }

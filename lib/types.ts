@@ -81,6 +81,8 @@ export type Memory = {
 export type FeaturedPreview = {
   title: string;
   caption: string;
+  /** Shot date or range from the photos' EXIF. */
+  when?: string;
   photos: { src: string; w: number; h: number; video?: string }[];
 };
 

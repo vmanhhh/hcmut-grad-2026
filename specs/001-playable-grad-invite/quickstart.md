@@ -42,7 +42,7 @@ Each scenario lists the spec items it proves. Run the "📱" ones on a real iPho
 | V7 📱 | Open the link inside Zalo and tap "Thêm vào lịch" | The banner offers "open in browser" and "copy details", and Google Calendar works | FR-010a |
 | V8 📱 | Tap "Chỉ đường tới điểm gặp", then "Open Maps" on each gate | The maps app opens at the meeting pin or the gate pin | FR-011, FR-021 |
 | V9 📱 | Tap the call and Zalo buttons | The dialer opens with 0981907003, and Zalo opens the chat | FR-024 |
-| V10 | Share the link in Zalo or Messenger | The preview shows a generic title and image, with no guest name | FR-025 |
+| V10 | Share a personal link in Zalo or Messenger | The preview shows the guest's name in the title and image, and nothing else from the guest record | FR-025 |
 | V11 | Set `event.journey_version = 1`, then open a guest that was already opened | The card appears with the one-time "Hành trình mới — chơi thử?" prompt. After answering, it doesn't appear on reload | FR-012a |
 | V12 📱 | Open a fresh link with `journey_version = 1` | The journey plays: tutorial, then hallway frames with a photo and caption, stage, diploma, then a letter with this guest's message, then the card | US3, FR-015, FR-017 |
 | V13 | During the journey, tap "Vào thiệp mời" within 1 second of load | The card appears, even if Phaser hasn't loaded yet | FR-014, Principle I |
@@ -53,3 +53,4 @@ Each scenario lists the spec items it proves. Run the "📱" ones on a real iPho
 | V18 | Edit a guest's message in the Supabase dashboard, then reload their link | The new message shows without a redeploy | FR-019 |
 | V19 | View the page source of `/i/{code}`, and search the JavaScript bundles for a guest name | The name appears only in that page's HTML payload, never in `/_next/static` | Principle II |
 | V20 | Time a skip → RSVP → add-to-calendar run on a phone | Under 1 minute | SC-002 |
+| V21 | Create a group with `pnpm seed:groups`, open `/g/{slug}`, enter a name and a note | You land on a personal `/i/{code}` card with that name; `guests.note` holds the note; reopening `/g/{slug}` in the same browser returns to the same card | FR-026 |

@@ -9,12 +9,13 @@ import { label } from "../ui/text";
 import Hero, { Npc, Walk, bakeGround, followCamera, rng } from "../world";
 
 const COLS = 32;
-const ROWS = 104;
+const EXT = 12; // extra lane south of the park: all the memories now hang along this one lane
+const ROWS = 58 + EXT; // was 104 originally: kept short so guests do not have to walk far
 const CX = (COLS * T) / 2; // 256: centre line of the lane
 const LANE_L = 13 * T; // paved lane x range: 208..304
 const LANE_R = 19 * T;
-const GATE_Y = 100 * T; // base line of the HCMUT gate
-const START_Y = 101 * T; // just south of the gate: the whole pillar fits in a 266 px tall desktop view
+const GATE_Y = (54 + EXT) * T; // base line of the HCMUT gate
+const START_Y = (55 + EXT) * T; // just south of the gate: the whole pillar fits in a 266 px tall desktop view
 const TOP_PAD = 40; // the camera may look this far above the map (the flag of the main hall reaches the top edge)
 
 /** Main hall sprite (tools/hcmut_art.py MAIN_*): 336 x 214, the entrance centre is 164 px from its left edge, the sign fascia is 37..65. */
@@ -57,11 +58,11 @@ export default class Campus extends Phaser.Scene {
 
     // ------------------------------------------------------------ ground
     const g = new Grid(COLS, ROWS, "g");
-    g.rect(13, 12, 18, 103, "p"); // the lane
+    g.rect(13, 12, 18, 57 + EXT, "p"); // the lane
     g.rect(6, 12, 25, 29, "q"); // town square in front of the main hall
-    g.rect(8, 99, 23, 103, "p"); // forecourt outside the gate
-    g.rect(10, 60, 21, 77, "p"); // the park opens the lane up a little
-    for (const y of [75, 52, 36]) g.rect(13, y, 18, y + 1, "q"); // inlaid plaza bands across the lane
+    g.rect(8, 53 + EXT, 23, 57 + EXT, "p"); // forecourt outside the gate
+    g.rect(10, 32, 21, 49, "p"); // the park opens the lane up a little
+    for (const y of [47]) g.rect(13, y, 18, y + 1, "q"); // inlaid plaza bands across the lane
     bakeGround(this, "campus-ground", COLS, ROWS, g.names(3));
 
     // ---------------------------------------------------- main building
@@ -127,96 +128,70 @@ export default class Campus extends Phaser.Scene {
     // small "2022" plaque at the foot of the pillar keeps the Gate 2022 story
     put(this, "gate_plaque", PILLAR_X, GATE_Y + 12, { depth: GATE_Y + 12 });
     label(this, PILLAR_X, GATE_Y + 2, "2022", { size: 14, color: "#ffffff", stroke: null, depth: GATE_Y + 14 });
-    put(this, "palm_c", 6.5 * T, 97 * T);
-    put(this, "tree_a", 9.5 * T, 96.2 * T);
-    put(this, "palm_c", 27 * T, 97.2 * T, { flip: true });
-    put(this, "tree_a", 3 * T, 98 * T);
-    put(this, "tree_b", 28.5 * T, 97.5 * T);
-    put(this, "palm_a", 5 * T, 104 * T);
-    put(this, "palm_b", 27 * T, 104 * T, { flip: true });
-    put(this, "bush_b", 7.5 * T, 101.5 * T);
-    put(this, "bush_c", 24.5 * T, 102 * T);
-    put(this, "signpost", 9 * T, 102 * T);
+    put(this, "palm_c", 6.5 * T, (51 + EXT) * T);
+    put(this, "tree_a", 9.5 * T, (50.2 + EXT) * T);
+    put(this, "palm_c", 27 * T, (51.2 + EXT) * T, { flip: true });
+    put(this, "tree_a", 3 * T, (52 + EXT) * T);
+    put(this, "tree_b", 28.5 * T, (51.5 + EXT) * T);
+    put(this, "palm_a", 5 * T, (58 + EXT) * T);
+    put(this, "palm_b", 27 * T, (58 + EXT) * T, { flip: true });
+    put(this, "bush_b", 7.5 * T, (55.5 + EXT) * T);
+    put(this, "bush_c", 24.5 * T, (56 + EXT) * T);
+    put(this, "signpost", 9 * T, (56 + EXT) * T);
 
     // street furniture by the lane
-    put(this, "k_bin_grey", 12.4 * T, 53.6 * T);
-    put(this, "k_hydrant", 19.6 * T, 52.6 * T);
-    for (const [x, y] of [
-      [12.4, 66],
-      [19.6, 71],
-      [12.4, 36],
-      [19.6, 44],
-    ] as [number, number][]) {
-      put(this, "pot_plant", x * T, y * T);
-    }
+    put(this, "k_bin_grey", 12.4 * T, 51.6 * T);
+    put(this, "k_hydrant", 19.6 * T, 22.6 * T);
 
-    // -------------------------------------------- the park (y 60..77)
+    // -------------------------------------------- the park (y 32..49)
     const park = [
-      ["palm_c", 9.5, 75],
-      ["palm_a", 10.4, 66.5],
-      ["tree_b", 7, 67],
-      ["bush_b", 11.6, 73.5],
-      ["bed_pink", 8.5, 73.3],
-      ["bench", 11.4, 63.6],
-      ["palm_b", 22.5, 75],
-      ["tree_c", 20.8, 69],
-      ["palm_a", 21.6, 65],
-      ["tree_a", 25, 66.5],
-      ["bush_c", 20.2, 73.6],
-      ["bed_yellow", 23.6, 73.3],
-      ["bench", 20.4, 63.4],
-      ["umbrella_red", 7.2, 62.5],
-      ["umbrella_blue", 24.4, 61.8],
+      ["palm_c", 9.5, 47],
+      ["palm_a", 10.4, 38.5],
+      ["tree_b", 7, 39],
+      ["bush_b", 11.6, 45.5],
+      ["bed_pink", 8.5, 45.3],
+      ["bench", 11.4, 35.6],
+      ["palm_b", 22.5, 47],
+      ["tree_c", 20.8, 41],
+      ["palm_a", 21.6, 37],
+      ["tree_a", 25, 38.5],
+      ["bush_c", 20.2, 45.6],
+      ["bed_yellow", 23.6, 45.3],
+      ["bench", 20.4, 35.4],
+      ["umbrella_red", 7.2, 34.5],
+      ["umbrella_blue", 24.4, 33.8],
     ] as [string, number, number][];
     for (const [k, x, y] of park) put(this, k, x * T, y * T);
     // grass beside the lane and the far edges carry trees, bushes and flower patches
-    for (let y = 12; y < 98; y += 3) {
+    for (let y = 12; y < 52 + EXT; y += 3) {
       for (const side of [0, 1]) {
         if (r() < 0.45) continue;
-        if (y > 59 && y < 78) continue; // the park is hand-placed
+        if (y > 31 && y < 50) continue; // the park is hand-placed
         const x = side === 0 ? 0.6 + r() * 2.4 : 29 + r() * 2.4;
         put(this, ["bush_a", "bush_b", "bush_c", "tree_a", "tree_b", "palm_a", "palm_b"][Math.floor(r() * 7)], x * T, (y + r()) * T, { flip: r() < 0.5 });
       }
     }
     for (const [x, y] of [
-      [2, 86],
-      [29.5, 88],
-      [2.5, 70],
-      [4, 54],
-      [28, 53],
-      [3, 46],
-      [29, 44],
+      [2.5, 42],
+      [29, 34],
+      [3, 26],
+      [28.5, 22]
     ] as [number, number][]) {
       put(this, r() < 0.5 ? "tree_a" : "tree_b", x * T, y * T);
     }
 
     // ------------------------------------------------------- walkers
-    new Npc(this, "npc-1", [
-      { x: 14.6 * T, y: 90 * T },
-      { x: 14.6 * T, y: 76 * T },
-    ]);
+    // few walkers on purpose: one on the lane, one in the square
     new Npc(this, "npc-2", [
-      { x: 17.4 * T, y: 70 * T },
-      { x: 17.4 * T, y: 53 * T },
+      { x: 17.4 * T, y: 44 * T },
+      { x: 17.4 * T, y: 32 * T },
     ], 20);
-    new Npc(this, "npc-3", [
-      { x: 13.8 * T, y: 58 * T },
-      { x: 17.2 * T, y: 58 * T },
-    ], 14);
     new Npc(this, "npc-4", [
       { x: 19.6 * T, y: 28.6 * T },
       { x: 19.6 * T, y: 24 * T },
       { x: 23.5 * T, y: 24 * T },
       { x: 23.5 * T, y: 28.6 * T },
     ], 18);
-    new Npc(this, "npc-2", [
-      { x: 9.5 * T, y: 100.8 * T },
-      { x: 12.5 * T, y: 100.8 * T },
-    ], 12);
-    new Npc(this, "npc-4", [
-      { x: 14.4 * T, y: 38 * T },
-      { x: 14.4 * T, y: 44 * T },
-    ], 16);
 
     // ---------------------------------------------------------- hero
     const walk = new Walk(
@@ -224,7 +199,7 @@ export default class Campus extends Phaser.Scene {
         { x0: CX - 32, y0: DOOR_Y - 12, x1: CX + 32, y1: START_Y + 6 },
         { x0: 9 * T, y0: 12 * T + 4, x1: 23 * T, y1: 16 * T },
         { x0: 10 * T, y0: GATE_Y + 2, x1: 22 * T, y1: START_Y + 6 },
-        { x0: 11 * T, y0: 60 * T, x1: 21 * T, y1: 77 * T },
+        { x0: 11 * T, y0: 32 * T, x1: 21 * T, y1: 49 * T },
       ],
       [
         { x: CX, y: START_Y },
@@ -251,7 +226,8 @@ export default class Campus extends Phaser.Scene {
     });
     // Outdoor memories: wooden frames only — crisp photos live in the HTML caption strip
     for (const f of FEATURED_OUTDOOR) {
-      const slot = hangFrame(this, f, { laneL: LANE_L, laneR: LANE_R });
+      // Day 1: the milestone is the HCMUT logo pillar at the gate, so no extra marker sprite is drawn
+      const slot = hangFrame(this, f, f.id === "f1" ? { laneL: LANE_L, laneR: LANE_R, wallL: PILLAR_X, bare: true } : { laneL: LANE_L, laneR: LANE_R });
       bindFrameHit(this, slot, this.hud, this.hero, (side) => (side === "l" ? LANE_L + 20 : LANE_R - 20));
       this.frames.push(slot);
     }
@@ -283,7 +259,7 @@ export default class Campus extends Phaser.Scene {
     this.hero.frozen = this.hud.modalOpen;
     this.hero.update(time, delta);
     if (this.hero.y < START_Y - 40) this.hud.hideHint();
-    const near = tickFrames(this, this.frames, this.hero, this.featuredId);
+    const near = tickFrames(this, this.frames, this.hero, this.featuredId, this.hud.guideOpen);
     if (near !== this.nearFrame) {
       this.nearFrame = near;
       this.hud.setInteractable(
@@ -298,7 +274,7 @@ export default class Campus extends Phaser.Scene {
       this.hero.frozen = true;
       this.hero.cancelRoute();
       this.cameras.main.fadeOut(350);
-      this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("Hallway"));
+      this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("Stage"));
     }
   }
 }

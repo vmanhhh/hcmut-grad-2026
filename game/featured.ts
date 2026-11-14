@@ -2,7 +2,7 @@ import type { Gallery, GalleryItem } from "@/lib/types";
 
 /**
  * Featured memories hung along the journey. `place` puts outdoor beats on Campus hedges and indoor
- * beats on Hallway walls. Real photos are never drawn in the pixel canvas — only a wooden frame —
+ * beats (the old hallway was removed: walking through the building door goes straight to the hall). Real photos are never drawn in the pixel canvas — only a wooden frame —
  * crisp photos appear in the HTML caption strip (`onFeatured`).
  */
 export type Featured = {
@@ -16,65 +16,57 @@ export type Featured = {
   y: number;
   title: string;
   caption: string;
+  /** Shot date or range taken from the photos' EXIF (shown on the memory card), e.g. "19/09/2022" or "07/06 – 26/07/2025". */
+  when?: string;
 };
 
 type Beat = Omit<Featured, "y" | "side">;
 
-// Order follows the host's own telling of the four years.
+// Order follows the host's own telling of the four years. Kept short on purpose (11 stops): related
+// albums are merged into one stop so guests walk less. `when` comes from the photos' EXIF dates.
 const OUTDOOR: Beat[] = [
-  { id: "f1", year: 1, place: "outdoor", event: "y1-first-flight-to-hcmut", title: "Day 1: bay vào Sài Gòn", caption: "Một chiếc vali, một giấc mơ\nvà tấm vé đến Bách Khoa." },
-  { id: "f3", year: 1, place: "outdoor", event: "y1-khai-giang", title: "Khai giảng", caption: "Ngày đầu làm sinh ziên." },
-  { id: "f7", year: 1, place: "outdoor", event: "y1-nhung-nguoi-ban-moi", title: "Lần đầu vào Đoàn Hội, trước khi bị bào", caption: "Gặp gỡ những người bạn mới." },
-  { id: "f5", year: 1, place: "outdoor", event: "y1-trip-dau-tien-cung-nhung-nguoi-ban-nguoi", title: "Chuyến đi Nha Trang đầu tiên", caption: "Chuyến đi đầu tiên cùng Đoàn Hội." },
-  { id: "f4", year: 1, place: "outdoor", event: "y1-hoc-quoc-phong", title: "Học quốc phòng", caption: "Từng mê kem chuối lắm,\nsau quốc phòng thì hết thích luôn 🍌" },
-  { id: "f6", year: 1, place: "outdoor", event: "y1-mhx-dau-tien", title: "Mùa hè Xanh 2023", caption: "Top 1 cách đen da nhanh nhất." },
-  { id: "f8", year: 2, place: "outdoor", event: "y2-dan-em-dau-tien", title: "Nhận mấy đứa nhỏ K23", caption: "Gòi chở Thiên Kim và té xe :))" },
-  { id: "f10", year: 2, place: "outdoor", event: "y2-xuan-tinh-nguyen", title: "Xuân tình nguyện", caption: "Đi Xuân tình nguyện cùng mọi người." },
-  { id: "f9", year: 2, place: "outdoor", event: "y2-da-lat-cung-doan-hoi", title: "Tập huấn Đà Lạt", caption: "Toàn nhậu không." },
-  { id: "f23", year: 2, place: "outdoor", event: "y2-media-cse", more: ["y2-media-lo"], title: "Media lỏ", caption: "Hội những người bị dí nhiều nhất đoàn hội" },
-];
-
-const INDOOR: Beat[] = [
-  { id: "f12", year: 2, place: "indoor", event: "y2-dem-bach-khoa-mat-dien", title: "Một đêm ở BK mưa to và cúp điện", caption: "Hên ko bị bảo vệ bắt." },
-  { id: "f13", year: 2, place: "indoor", event: "y2-first-night-cung-lbd", title: "Đêm đầu cùng LBĐ", caption: "Hồi đó không biết bị thầy dụ về nhà\nở Vinhomes Q9 xa xôi hẻo lánh." },
-  { id: "f14", year: 3, place: "indoor", event: "y3-trip-cuoi-cung-cung-doan-hoi", title: "Trip cuối cùng cùng Đoàn Hội", caption: "Chuyến đi cuối cùng\ncùng những người anh em." },
-  { id: "f15", year: 3, place: "indoor", event: "y3-nha-c24-07", title: "Nhà thổ C24.07", caption: "Ngôi nhà sa đọa nhất Bình Dương." },
-  { id: "f24", year: 4, place: "indoor", event: "y4-trip-cuoi-cung-cung-k22", title: "Trip cuối năm đại học cùng K22", caption: "Chuyến đi cuối cùng\ncủa những năm đại học cùng K22." },
-  { id: "f25", year: 4, place: "indoor", event: "y4-party-welcome-nguoi-moi", title: "Ngày đầu gia nhập thị trường", caption: "Mọi người làm party welcome người mới ;))\nSốt anh Quang Trần luôn là số 1." },
-  { id: "f19", year: 4, place: "indoor", event: "y4-trekking-cung-cong-ty-dau-tien", title: "Những chuỗi ngày trekking", caption: "Sinh nhật trekking, vui trekking, buồn trekking,\nđi chill cũng trekking." },
-  { id: "f21", year: 4, place: "indoor", event: "y4-trip-cung-nhung-nguoi-de-thung", title: "Du lịch cùng đồng nghiệp thân thiết", caption: "Cũng nhiều kỷ niệm." },
+  { id: "f1", year: 1, place: "outdoor", event: "y1-first-flight-to-hcmut", more: ["y1-khai-giang"], title: "Day 1: bay vào Sài Gòn & Khai giảng", caption: "Một chiếc vali, một giấc mơ\nvà tấm vé đến Bách Khoa.", when: "19/09 – 09/10/2022" },
+  { id: "f5", year: 1, place: "outdoor", event: "y1-trip-dau-tien-cung-nhung-nguoi-ban-nguoi", more: ["y1-nhung-nguoi-ban-moi"], title: "Vào Đoàn Hội & chuyến đi Nha Trang đầu tiên", caption: "Gặp gỡ những người bạn mới, trước khi bị bào.", when: "18 – 20/02/2023" },
+  { id: "f6", year: 1, place: "outdoor", event: "y1-hoc-quoc-phong", more: ["y1-mhx-dau-tien"], title: "Học quốc phòng & Mùa hè Xanh 2023", caption: "Hết thích kem chuối sau quốc phòng,\ntop 1 cách đen da nhanh nhất 🍌", when: "25/03 – 21/07/2023" },
+  { id: "f8", year: 2, place: "outdoor", event: "y2-dan-em-dau-tien", title: "Nhận mấy đứa nhỏ K23", caption: "Gòi chở Thiên Kim và té xe :))", when: "07/10/2023" },
+  { id: "f23", year: 2, place: "outdoor", event: "y2-media-cse", more: ["y2-media-lo"], title: "Media lỏ", caption: "Hội những người bị dí nhiều nhất đoàn hội", when: "16/09/2023 – 12/01/2024" },
+  { id: "f10", year: 2, place: "outdoor", event: "y2-xuan-tinh-nguyen", more: ["y2-da-lat-cung-doan-hoi"], title: "Xuân tình nguyện & tập huấn Đà Lạt", caption: "Đi Xuân tình nguyện cùng mọi người,\nlên Đà Lạt thì toàn nhậu không.", when: "13 – 20/01/2024" },
+  { id: "f13", year: 2, place: "outdoor", event: "y2-first-night-cung-lbd", more: ["y3-nha-c24-07"], title: "Đêm đầu cùng LBĐ & nhà C24.07", caption: "Bị thầy dụ về Vinhomes Q9 xa xôi hẻo lánh,\nrồi có ngôi nhà sa đọa nhất Bình Dương.", when: "31/03 – 03/12/2024" },
+  { id: "f19", year: 4, place: "outdoor", event: "y4-trekking-cung-cong-ty-dau-tien", more: ["y4-party-welcome-nguoi-moi"], title: "Gia nhập thị trường & những chuỗi ngày trekking", caption: "Sinh nhật trekking, vui trekking, buồn trekking,\nđi chill cũng trekking.", when: "07/06 – 26/07/2025" },
+  { id: "f24", year: 4, place: "outdoor", event: "y4-anh-em-nha-d1107", more: ["y4-trip-cuoi-cung-cung-k22"], title: "Nhà thổ D1107 · cuối năm đại học", caption: "Cùng bộ ba Thầy Bí, Thầy Đẳng, Thầy Quân,\nvà chuyến đi cuối cùng cùng K22.", when: "29/11 – 14/12/2025" },
   {
     id: "f20",
     year: 4,
-    place: "indoor",
+    place: "outdoor",
     event: "y4-tat-nien-cung-nhung-dong-nghiep-de-thuon",
-    more: ["y4-lan-dau-lam-sale", "y4-sinh-nhat-cong-ty"],
+    more: ["y4-lan-dau-lam-sale", "y4-sinh-nhat-cong-ty", "y4-trip-cung-nhung-nguoi-de-thung"],
     title: "Những moment cùng đồng nghiệp",
     caption: "Những người là động lực để mình lên công ty\nthay vì ở nhà wfh.",
+    when: "22/08/2025 – 11/07/2026",
   },
-  { id: "f17", year: 4, place: "indoor", event: "y4-ban-hoc-moi-tot-nghiep", title: "Đi tốt nghiệp FTU lấy vía", caption: "Lấy vía thành công từ Trà My,\ngiờ tới lượt tôi." },
-  { id: "f27", year: 4, place: "indoor", event: "y4-nha-trung-nhut-dong-thap", more: ["y4-nhau"], title: "Ghé nhà Trung Nhựt ở Đồng Tháp", caption: "Lần đầu ghé nhà bạn Nhựt Trần." },
-  { id: "f26", year: 4, place: "indoor", event: "y4-anh-em-nha-d1107", title: "D1107", caption: "Cùng bộ ba Thầy Bí, Thầy Đẳng, Thầy Quân." },
+  { id: "f17", year: 4, place: "outdoor", event: "y4-ban-hoc-moi-tot-nghiep", title: "Đi tốt nghiệp FTU lấy vía", caption: "Lấy vía thành công từ Trà My,\ngiờ tới lượt tôi.", when: "26/09/2026" },
 ];
 
-function space(beats: Beat[], yOut: number, yIn: number): Featured[] {
+function space(beats: Beat[], yOut: number, yIn: number, first: "l" | "r" = "l"): Featured[] {
   return beats.map((b, i) => {
     const t = beats.length === 1 ? 0 : i / (beats.length - 1);
     return {
       ...b,
-      side: (i % 2 === 0 ? "l" : "r") as "l" | "r",
+      side: ((i % 2 === 0) === (first === "l") ? "l" : "r") as "l" | "r",
       y: Math.round(yOut - t * (yOut - yIn)),
     };
   });
 }
 
 /** Outdoor campus lane: gate → main-hall door. */
-export const FEATURED_OUTDOOR = space(OUTDOOR, 83, 18);
-/** Indoor hallway: entrance → stage door. */
-export const FEATURED_INDOOR = space(INDOOR, 60, 12);
+/** "Day 1" is the BK logo pillar of the gate itself (Campus places it there); the rest are spaced along the lane. */
+export const FEATURED_OUTDOOR: Featured[] = [
+  { ...OUTDOOR[0], side: "l", y: 66 } /* = Campus GATE_Y / T */,
+  ...space(OUTDOOR.slice(1), 58, 17, "r"), // first stop (Nha Trang) on the right so the logo pillar does not cover it
+];
 
 /** All featured (Boot / lookups). */
-export const FEATURED = [...FEATURED_OUTDOOR, ...FEATURED_INDOOR];
+export const FEATURED = FEATURED_OUTDOOR;
 
 function eventsOf(galleries: Gallery[], f: Featured) {
   const all = galleries.flatMap((g) => g.events);

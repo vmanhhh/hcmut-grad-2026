@@ -3,7 +3,6 @@ import type { GameContext, JourneyCallbacks, JourneyHandle, JourneyInput } from 
 import { Keys } from "./input";
 import Boot from "./scenes/Boot";
 import Campus from "./scenes/Campus";
-import Hallway from "./scenes/Hallway";
 import Letter from "./scenes/Letter";
 import Stage from "./scenes/Stage";
 import { applyResolution } from "./ui/text";
@@ -126,7 +125,7 @@ export function startJourney(parent: HTMLElement, input: JourneyInput, cb: Journ
       backgroundColor: "#5eb04d",
       scale: { mode: Phaser.Scale.NONE, zoom: first.zoom, autoCenter: Phaser.Scale.CENTER_BOTH },
       input: { activePointers: 3, keyboard: false },
-      scene: [Boot, Campus, Hallway, Stage, Letter],
+      scene: [Boot, Campus, Stage, Letter],
       callbacks: {
         preBoot: (g) => {
           g.registry.set("ctx", gameCtx);

@@ -346,3 +346,67 @@ a:focus-visible {
   from { transform: translateX(-100%); }
   to { transform: translateX(350%); }
 }
+
+/* Call-to-action that blinks gently so guests notice it */
+.btn-blink {
+  animation: btn-blink 1.1s ease-in-out infinite;
+}
+@keyframes btn-blink {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(242, 199, 90, 0.9); filter: brightness(1); }
+  50% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(242, 199, 90, 0); filter: brightness(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-blink { animation: none; }
+}
+
+/* Square pixel button matching the invitation card (gold fill, dark border, red hard shadow, no rounded corners) */
+.pixel-btn {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: 3px solid #1b1a38;
+  border-radius: 0;
+  background: #f2c75a;
+  color: #1b1a38;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 #b02f36;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.pixel-btn:hover {
+  filter: brightness(1.08);
+}
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #b02f36;
+}
+.pixel-btn[disabled] {
+  opacity: 0.7;
+  cursor: progress;
+}
+.pixel-btn.btn-blink {
+  animation: pixel-blink 1s steps(2, jump-none) infinite;
+}
+@keyframes pixel-blink {
+  0% { background: #f2c75a; box-shadow: 3px 3px 0 #b02f36; }
+  100% { background: #fff3c4; box-shadow: 3px 3px 0 #b02f36, 0 0 0 3px #f2c75a; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pixel-btn.btn-blink { animation: none; }
+}
+
+/* Secondary pixel button (undo): dark fill, gold border */
+.pixel-btn-ghost {
+  background: #1b1a38;
+  color: #fff3c4;
+  border-color: #f2c75a;
+  box-shadow: 3px 3px 0 #0b0a1c;
+  min-height: 40px;
+  font-size: 0.8rem;
+}

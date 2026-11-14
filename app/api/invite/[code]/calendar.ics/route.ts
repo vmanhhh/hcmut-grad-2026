@@ -1,6 +1,6 @@
 import { guard, json } from "@/lib/api-guard";
 import { getInvite } from "@/lib/invites";
-import { buildIcs, selectWindows } from "@/lib/calendar";
+import { MEETING_WINDOWS, buildIcs, selectWindows } from "@/lib/calendar";
 import type { Gate } from "@/lib/types";
 
 export async function GET(request: Request, ctx: { params: Promise<{ code: string }> }) {
@@ -15,7 +15,7 @@ export async function GET(request: Request, ctx: { params: Promise<{ code: strin
   try {
     const rec = await getInvite(code);
     if (!rec) return json({ error: "invalid_invite" }, 404);
-    const windows = selectWindows(rec.event.windows, rec.guest.meeting_window, query);
+    const windows = selectWindows(MEETING_WINDOWS, "early", query);
     const ics = buildIcs({
       event: rec.event,
       code,

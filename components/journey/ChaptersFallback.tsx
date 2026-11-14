@@ -48,7 +48,6 @@ export default function ChaptersFallback({
 
       <section className="space-y-3 rounded-3xl bg-[#f3e9cf] p-6 text-[#2a2018]">
         <h2 className="font-hand text-3xl text-[#7a4a12]">{letter.salutation}</h2>
-        <p className="font-hand text-2xl font-bold">{letter.title}</p>
         <p className="font-hand whitespace-pre-line text-xl leading-relaxed">{letter.body}</p>
         <p className="font-hand text-right text-2xl text-[#7a4a12]">— {hostName}</p>
       </section>

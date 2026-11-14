@@ -5,10 +5,11 @@ import { supabaseServer } from "./supabase-server";
  * Buckets (see contracts/http-api.md):
  * - page:    /i/{code} lookups, 30 / 10 min per IP
  * - crawler: /i/{code} lookups from known link-preview crawlers, 300 / 10 min per IP (analyze I2)
+ * - join:    POST /api/group/{slug}, which creates a guest row: 20 / 10 min per IP
  * - api:     open / rsvp / calendar.ics, 60 / 10 min per code + IP (analyze I1: a household or a
  *            venue Wi-Fi shares one IP, so the api bucket is keyed by code too)
  */
-export type Bucket = "page" | "crawler" | "api";
+export type Bucket = "page" | "crawler" | "api" | "join";
 
 const WINDOW_S = 600;
 
@@ -19,6 +20,7 @@ function limitFor(bucket: Bucket): number {
   };
   if (bucket === "page") return fromEnv("RATE_LIMIT_PAGE_MAX", 30);
   if (bucket === "crawler") return fromEnv("RATE_LIMIT_CRAWLER_MAX", 300);
+  if (bucket === "join") return fromEnv("RATE_LIMIT_JOIN_MAX", 20);
   return fromEnv("RATE_LIMIT_API_MAX", 60);
 }
 

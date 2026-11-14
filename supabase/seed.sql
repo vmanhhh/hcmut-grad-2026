@@ -21,9 +21,8 @@ insert into event (
   'Tòa nhà Khoa Khoa học và Kỹ thuật Máy tính',
   10.7728, 106.6606,
   null,
-  '[{"id":"early","starts_at":"2026-11-28T13:30:00+07:00","ends_at":"2026-11-28T15:00:00+07:00"},
-    {"id":"late","starts_at":"2026-11-28T17:30:00+07:00","ends_at":"2026-11-28T18:30:00+07:00"}]'::jsonb,
-  '15:00–17:30 mình ở trong lễ, chưa gặp được nha',
+  '[{"id":"early","starts_at":"2026-11-28T09:00:00+07:00","ends_at":"2026-11-28T12:00:00+07:00"}]'::jsonb,
+  null,
   'Asia/Ho_Chi_Minh',
   'https://manh-totnghiep.vercel.app',
   0

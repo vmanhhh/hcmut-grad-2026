@@ -1,5 +1,5 @@
 import { guard, json } from "@/lib/api-guard";
-import { RsvpSchema, saveRsvp } from "@/lib/invites";
+import { RsvpSchema, clearRsvp, saveRsvp } from "@/lib/invites";
 
 export async function POST(request: Request, ctx: { params: Promise<{ code: string }> }) {
   const { code } = await ctx.params;
@@ -21,6 +21,19 @@ export async function POST(request: Request, ctx: { params: Promise<{ code: stri
     const saved = await saveRsvp(code, parsed.data);
     if (!saved) return json({ error: "invalid_invite" }, 404);
     return json({ ok: true, rsvp: saved });
+  } catch {
+    return json({ error: "server_error" }, 500);
+  }
+}
+
+/** Undo a previous answer. */
+export async function DELETE(request: Request, ctx: { params: Promise<{ code: string }> }) {
+  const { code } = await ctx.params;
+  const blocked = await guard(request, code);
+  if (blocked) return blocked;
+  try {
+    if (!(await clearRsvp(code))) return json({ error: "invalid_invite" }, 404);
+    return json({ ok: true });
   } catch {
     return json({ error: "server_error" }, 500);
   }

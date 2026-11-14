@@ -66,7 +66,7 @@ One row, `id = 1` (enforced with `check (id = 1)`).
 | meeting_lat, meeting_lng | double precision | placeholder; host sets real pin |
 | meeting_note | text | walking/meeting tip; filled later |
 | windows | jsonb | `[{"id":"early","starts_at":"2026-11-28T13:30:00+07:00","ends_at":"2026-11-28T15:00:00+07:00"},{"id":"late","starts_at":"2026-11-28T17:30:00+07:00","ends_at":"2026-11-28T18:30:00+07:00"}]` |
-| busy_note | text | "15:00–17:30 mình ở trong lễ, chưa gặp được nha" |
+| busy_note | text | null (no note) |
 | timezone | text | "Asia/Ho_Chi_Minh" |
 | public_base_url | text | "https://manh-totnghiep.vercel.app" |
 | journey_version | int | 0 at release A; 1 when the journey ships (R12) |

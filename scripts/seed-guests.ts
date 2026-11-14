@@ -130,7 +130,7 @@ async function main() {
     display_name: r.display_name,
     role: r.role as Role,
     salutation: r.salutation || null,
-    message_title: r.message_title || defaultTitleFor(r.role as Role, r.display_name),
+    message_title: r.message_title || "",
     message_body: r.message_body,
   }));
 

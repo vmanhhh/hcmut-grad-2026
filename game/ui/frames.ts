@@ -19,6 +19,8 @@ type HangOpts = {
   /** x of the marker posts on the left / right side (defaults to just outside the lane). */
   wallL?: number;
   wallR?: number;
+  /** No marker sprite: the glow floats over an existing landmark (e.g. the gate pillar). */
+  bare?: boolean;
 };
 
 /**
@@ -33,7 +35,8 @@ export function hangFrame(scene: Phaser.Scene, f: Featured, o: HangOpts): FrameS
   const box = scene.add.container(cx, base).setDepth(d);
   const key = `mk_${f.id}`;
   const spr = scene.add.image(0, 0, "atlas", scene.textures.get("atlas").has(key) ? key : "signpost").setOrigin(0.5, 1);
-  const glow = scene.add.image(0, -spr.height * 0.55, "atlas", "glow64").setBlendMode(Phaser.BlendModes.ADD).setScale(1.1).setAlpha(0.12);
+  if (o.bare) spr.setVisible(false);
+  const glow = scene.add.image(0, o.bare ? -60 : -spr.height * 0.55, "atlas", "glow64").setBlendMode(Phaser.BlendModes.ADD).setScale(1.1).setAlpha(0.12);
   box.add([glow, spr]);
   scene.tweens.add({ targets: glow, alpha: { from: 0.05, to: 0.32 }, duration: 1200 + (f.y % 5) * 140, yoyo: true, repeat: -1 });
   return { cx, base, depth: d, box, featured: f, active: false };
@@ -62,11 +65,13 @@ export function tickFrames(
   frames: FrameSlot[],
   hero: Hero,
   featuredId: { current: string | null },
+  hold = false,
 ): FrameSlot | null {
+  if (hold) return null; // e.g. the how-to-play card is open: do not show a memory card over it
   let nearFr: FrameSlot | null = null;
   for (const fr of frames) {
     const near = Math.abs(hero.y - fr.base) < 34 && Math.abs(hero.x - fr.cx) < 100;
-    if (near && !nearFr) nearFr = fr;
+    if (near && (!nearFr || Math.abs(hero.y - fr.base) < Math.abs(hero.y - nearFr.base))) nearFr = fr; // nearest wins when two stops are close
     if (near !== fr.active) {
       fr.active = near;
       // the photos open in the HTML card; in the world the post just grows a little
@@ -80,7 +85,7 @@ export function tickFrames(
     featuredId.current = id;
     if (nearFr) {
       const photos = featuredMedia(ctx(scene).input.galleries, nearFr.featured);
-      ctx(scene).cb.onFeatured({ title: nearFr.featured.title, caption: nearFr.featured.caption, photos });
+      ctx(scene).cb.onFeatured({ title: nearFr.featured.title, caption: nearFr.featured.caption, when: nearFr.featured.when, photos });
     } else {
       ctx(scene).cb.onFeatured(null);
     }

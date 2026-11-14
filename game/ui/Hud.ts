@@ -92,6 +92,11 @@ export default class Hud {
     return this.external;
   }
 
+  /** The "how to play" card is on screen (memory cards must wait until it is dismissed). */
+  get guideOpen() {
+    return !!this.guideClose;
+  }
+
   /** Opens the host-owned gallery overlay for a year; the game is paused until the guest closes it. */
   openGallery(year: number) {
     if (this.external) return;
